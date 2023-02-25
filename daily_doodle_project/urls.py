@@ -9,4 +9,5 @@ urlpatterns = [
     path("",views.Index.as_view()),
     path("dailydoodle/",include("dailydoodle.urls")),
     path('admin/', admin.site.urls),
+    path("accounts/",include("registration.backends.simple.urls")),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -4,5 +4,5 @@ from django.urls import include
 from dailydoodle import views
 
 urlpatterns = [
-    path("",views.Index.as_view()),
+    path("",views.Index.as_view(),name="index"),
 ]

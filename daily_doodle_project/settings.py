@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dailydoodle',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -106,6 +107,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Registration Settings 
+REGISTRATION_OPEN = True
+REIGSTRATION_AUTO_LOGIN = True
+LOGIN_REDIRECT_URL = "dailydoodle:index"
+LOGIN_URL = "auth_login"
 
 
 # Internationalization
