@@ -1,5 +1,6 @@
 <!DOCTYPE html>
     {% load staticfiles %}
+    {% load daily_doodle_tags %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,6 +12,7 @@
     </title>
 </head>
 <body>
+    {% get_nav current_link %}
     <div id="main">
     {% block body_block %}
     {% endblock %}

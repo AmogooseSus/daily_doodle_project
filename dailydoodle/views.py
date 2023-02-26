@@ -7,5 +7,5 @@ from django.views import View
 class Index(View):
 
     def get(self,request):
-        return HttpResponse("Homepage")
+        return render(request,"dailydoodle/base.html")
 
