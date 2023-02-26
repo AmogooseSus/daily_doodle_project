@@ -15,7 +15,7 @@ class UserProfile(models.Model):
 # Prompt model
 class Prompt(models.Model):
     prompt = models.CharField(max_length=30,unique=True)
-    prompt_date = models.DateTimeField()
+    prompt_date = models.DateField()
 
 
 # Drawing model

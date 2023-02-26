@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import environ
+
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,8 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
+# set up django-environ so we can use .env variables
+env =environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR,".env"))
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '13^bnf_4vay5(2f73s)l^^nx%fzxmoln86=_funh*=75yd(b!1'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "dailydoodle.middleware.PromptMiddleware",
 ]
 
 ROOT_URLCONF = 'daily_doodle_project.urls'

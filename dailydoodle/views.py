@@ -5,6 +5,7 @@ from django.views import View
 
 # Create your views here.
 class Index(View):
-    
+
     def get(self,request):
         return HttpResponse("Homepage")
+
