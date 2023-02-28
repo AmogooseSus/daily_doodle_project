@@ -11,4 +11,7 @@ urlpatterns = [
     path("submissions/<username>",views.Submissions.as_view(),name="submissions"),
     path("profile",views.Profile.as_view(),name="profile"),
     path("leaderboard",views.LeaderBoard.as_view(),name="leaderboard"),
+    path("draw",views.Draw.as_view(),name="draw"),
+    path("drawing",views.Drawing.as_view(),name="draw"),
+    #add view for handling deletion of account
 ]
