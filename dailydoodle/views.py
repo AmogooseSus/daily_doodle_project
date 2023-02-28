@@ -55,7 +55,7 @@ class LeaderBoard(View):
 
     def get(self,request):
         # logic here needs more thinking 
-        return render(request,"dailydoodle/leadboard.html")
+        return render(request,"dailydoodle/leaderboard.html")
     
     # Also add method for handling searching of users via post request
     
@@ -100,4 +100,7 @@ class RegistrationView(RegistrationView):
         profile = UserProfile.objects.create(user=user,profile_picture=media_url)
         return reverse("dailydoodle:index")
 
+
+
+# Class view that extends the logout functionality so we instantly redirect user back to homescreen
 

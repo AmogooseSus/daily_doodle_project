@@ -17,6 +17,9 @@ class Prompt(models.Model):
     prompt = models.CharField(max_length=30,unique=True)
     prompt_date = models.DateField()
 
+    def __str__(self):
+        return self.prompt
+
 
 # Drawing model
 class Drawing(models.Model):

@@ -12,11 +12,14 @@
     </title>
 </head>
 <body>
-    {% get_nav current_link %}
+    {% get_nav current_link user %}
     <div id="main">
     {% block body_block %}
     {% endblock %}
     </div>
+
+    <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     
 </body>
 </html>

@@ -7,4 +7,8 @@ app_name = "dailydoodle"
 
 urlpatterns = [
     path("",views.Index.as_view(),name="index"),
+    path("collections",views.Collections.as_view(),name="collections"),
+    path("submissions/<username>",views.Submissions.as_view(),name="submissions"),
+    path("profile",views.Profile.as_view(),name="profile"),
+    path("leaderboard",views.LeaderBoard.as_view(),name="leaderboard"),
 ]

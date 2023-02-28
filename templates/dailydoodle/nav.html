@@ -1,3 +1,23 @@
-<nav>
- Temp nav
+<nav class="get_nav">
+    {% if user.username %}
+    <div class="user-section">
+        <img height="50px" width="50px" src="{{ MEDIA_URL}}{{user_profile_picture}}" alt="Profile Picture" />
+        <h1>{{ user.username }}</h1>
+    <div>
+    {% endif %}
+
+    <div class="links">
+    {% for k,v in all_links.items %}
+        <li><a href="{% url v %}">{{k}}</a></li>
+    {% endfor %}
+    {% if user.username %}
+        {% for k,v in locked_links.items %}
+        <li><a href="{% url v %}">{{k}}</a></li>
+        {% endfor %}
+    {% else %}
+        {% for k,v in non_locked_links.items %}
+        <li><a href="{% url v %}">{{k}}</a></li>
+        {% endfor %}
+    {% endif %}
+    <div>
 </nav>
