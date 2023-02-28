@@ -1,6 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
+from dailydoodle.models import *
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from registration.backends.simple.views import RegistrationView
+from django.utils.decorators import method_decorator
+from dailydoodle.apis import *
+from dailydoodle.view_helpers import *
 
 
 # Create your views here.
@@ -79,3 +87,17 @@ class Drawing(View):
         return render(request,"dailydoodle/drawing.html")
     
     # Also add methods for handling post requests e.g comments ,upvotes etc
+
+
+# Class view that extends the register functionality
+# This allows use to redirect to making a user profile
+class RegistrationView(RegistrationView):
+
+    def get_success_url(self,user):
+        #for each user we associate a profile picture of format username.jpg
+        #intially we get a random profile picture using an api
+        media_url = get_random_profile_picture(user.username)
+        profile = UserProfile.objects.create(user=user,profile_picture=media_url)
+        return reverse("dailydoodle:index")
+
+
