@@ -1,8 +1,24 @@
 {% extends "dailydoodle/base.html" %}
+{% load staticfiles %}
 {% block title_block %}
-Home
+Draw
 {% endblock %}
 
 {% block body_block %}
-Content for Draw
+{% csrf_token %} 
+<h1>{{ prompt }}</h1>
+<canvas id="canvas" height="500px" width="900px"></canvas>
+<button id="pencil">Pencil</button>
+<button id="eraser">Eraser</button>
+<button id="clear">Clear</button>
+<button id="undo">Undo</button>
+<button id="redo">Redo</button>
+<input type="range" min="1" max="50" value="5" id="pen-size" /> 
+<input type="range" min="1" max="50" value="5" id="eraser-size" /> 
+<input type="color" value="#000000" id="color" />
+<button id="submit">Submit</button>
+
+{% endblock %}
+{% block script_block %}
+<script src="{% static "js/draw_logic.js" %}"></script>
 {% endblock %}

@@ -9,6 +9,9 @@ from registration.backends.simple.views import RegistrationView
 from django.utils.decorators import method_decorator
 from dailydoodle.apis import *
 from dailydoodle.view_helpers import *
+from datetime import date
+from daily_doodle_project.settings import MEDIA_URL,MEDIA_ROOT
+import base64
 
 
 # Create your views here.
@@ -20,15 +23,27 @@ from dailydoodle.view_helpers import *
 class Index(View):
 
     def get(self,request):
+        context_dict = {}
         # get top 5 drawings (use helper function) and add them to context dict
-        # get users submission if exists or add no submission to context dict
         # get todays prompt 
-        return render(request,"dailydoodle/index.html")
+        prompt = Prompt.objects.filter(prompt_date=date.today())[0]
+        if(request.user.username):
+            # get users submission if exists or add none to context dict
+            user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
+            if len(user_drawing) != 0:
+                user_drawing = user_drawing[0]
+                context_dict["user_drawing"] = user_drawing.drawing
+            else:
+                context_dict["user_drawing"]  = None
+        context_dict["prompt"] = prompt.prompt 
+        context_dict["MEDIA_URL"] = MEDIA_URL
+        return render(request,"dailydoodle/index.html",context=context_dict)
     
 
 # Class view for collections
 class Collections(View):
 
+    @method_decorator(login_required)
     def get(self,request):
         # get intial n prompts using helper function and add to context dict
         # get intial n drawings using helper function and add to context dictionary
@@ -73,14 +88,36 @@ class Profile(View):
 # Class view for Draw mode
 class Draw(View):
 
+    @method_decorator(login_required)
     def get(self,request):
+        prompt = Prompt.objects.filter(prompt_date=date.today())[0]
+        user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
+        if(len(user_drawing) != 0):
+           return redirect(reverse("dailydoodle:index"))
+        context_dict = {}
         # get todays prompt
-        return render(request,"dailydoodle/draw.html")
+        prompt = Prompt.objects.filter(prompt_date=date.today())[0]
+        context_dict["prompt"] = prompt.prompt
+        return render(request,"dailydoodle/draw.html",context=context_dict)
     
-    # Also add method for handling submission of drawing
+    # handle submissions of drawings
+    @method_decorator(login_required)
+    def post(self,request):
+        prompt = Prompt.objects.filter(prompt_date=date.today())[0]
+        user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
+        if(len(user_drawing) != 0):
+            print("drawing alreayd exists")
+            return HttpResponse("REDIRECT")
+        image = request.POST.get("imageBase64").replace("data:image/jpeg;base64,","")
+        image = base64.b64decode(image)
+        with open(f"{MEDIA_ROOT}/submissions/{request.user}-{prompt.prompt}.jpeg","wb") as sub:
+            sub.write(image)
+        Drawing.objects.create(user=request.user,prompt=prompt,drawing=f"/submissions/{request.user}-{prompt}.jpeg",drawing_id=f"{request.user.username}-{prompt}")
+        return HttpResponse("REDIRECT")
+
     
 # Class view for viewing a Drawing
-class Drawing(View):
+class DrawingView(View):
 
     def get(self,request):
         # use parameters to get drawing and other useful details

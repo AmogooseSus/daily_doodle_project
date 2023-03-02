@@ -10,6 +10,7 @@
         {% block title_block %}
         {% endblock %}
     </title>
+
 </head>
 <body>
     {% get_nav current_link user %}
@@ -17,9 +18,9 @@
     {% block body_block %}
     {% endblock %}
     </div>
-
     <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    
+    <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
+    {% block script_block %}
+    {% endblock %}
 </body>
 </html>
