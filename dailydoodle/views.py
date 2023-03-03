@@ -55,7 +55,7 @@ class Collections(View):
 # Class view for any users submissions
 class Submissions(View):
 
-    def get(self,request):
+    def get(self,request,username):
         # get user 
         # get intial n drawings user has participated in
         # get intial n prompts user has participated in
