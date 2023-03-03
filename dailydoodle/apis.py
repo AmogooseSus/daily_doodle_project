@@ -29,7 +29,7 @@ def get_random_profile_picture(username):
             return f"/profile_images/{username}.jpg"
     else:
         with open(f"{MEDIA_ROOT}/profile_images/{username}.jpg","wb") as out_file:
-                to_copy = open(f"{MEDIA_ROOT}/profile_images/fractal_1.jpg","rb")
+                to_copy = open(f"{MEDIA_ROOT}/profile_images/fractal_1.png","rb")
                 shutil.copyfileobj(to_copy,out_file)
         print("Error:", response.status_code, response.text)
         return f"/profile_images/fractal_1.jpg"
