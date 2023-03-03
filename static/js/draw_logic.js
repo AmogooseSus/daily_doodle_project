@@ -1,17 +1,23 @@
 $().ready(() => {
+    //canvas properties
     let canvas = $("#canvas")[0];
     let ctx = canvas.getContext("2d");
     let mouseDown = false;
+    let canvasColour = "#C0D0E7";
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    ctx.fillStyle = "#C0D0E7";
+    //give canvas intial background
+    ctx.fillStyle = canvasColour;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Tool bar
+    // Tool bar and properties
     let pencil = $("#pencil")[0];
     let eraser = $("#eraser")[0];
+    //default selected tool to pencil
+    let tool_selected = pencil;
     let pencilWidth = $("#pen-size")[0].value;
     let eraserWidth = $("#eraser-size")[0].value;
+    let pencilColour = "#ffffff";
 
     $("#canvas").mousedown((e) => {
         mouseDown = true;
@@ -25,19 +31,26 @@ $().ready(() => {
 
     function handle_drawing(e) {
         if(!mouseDown) return;
-        handle_pencil(e);
+        if(tool_selected == pencil) {
+            handle_pencil(e);
+        }
+        else if(tool_selected == eraser) {
+            handle_eraser(e);
+        }
         
     }
 
     function handle_pencil(e) {
-        console.log("test")
+        ctx.strokeStyle = pencilColour;
         ctx.lineTo(e.offsetX,e.offsetY);
         ctx.stroke();
        
     }
 
     function handle_eraser(e) {
-
+        ctx.strokeStyle = canvasColour;
+        ctx.lineTo(e.offsetX,e.offsetY);
+        ctx.stroke();
     }
 
     $("#pen-size").change((e) => {
@@ -50,6 +63,21 @@ $().ready(() => {
         let size = $("#eraser-size")[0].value
         eraserWidth = size;
         ctx.lineWidth = eraserWidth;
+    })
+
+    $("#pencil").click((e) => {
+        console.log("test")
+        tool_selected = pencil;
+        console.log(tool_selected);
+    })
+
+    $("#eraser").click((e) => {
+        tool_selected = eraser;
+        console.log(tool_selected);
+    })
+
+    $("#clear").click((e) => {
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     })
 
     function getCookie(name) {
@@ -82,8 +110,6 @@ $().ready(() => {
         }).done((e) => {
             console.log("saved drawing");
         })
-        let img = $(`<img src=${image} />`);
-        $("body").append(img);
     })
 
 });
