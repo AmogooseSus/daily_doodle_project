@@ -161,6 +161,7 @@ $().ready(() => {
             headers: {"X-CSRFToken": getCookie("csrftoken")},
             data: {
                 imageBase64: image,
+                name: "submit",
             },
             enctype:"multipart/form-data",
 
@@ -169,5 +170,32 @@ $().ready(() => {
             location.href = "/dailydoodle/";
         })
     })
+
+    // reference image searching funtionality
+    let query = $("#search-bar")[0].value
+    $("#search").click((e) => {
+        console.log(query)
+        $.ajax({
+            type: "POST",
+            url: "/dailydoodle/draw/",
+            headers: {"X-CSRFToken": getCookie("csrftoken")},
+            data: {
+                name: "search",
+                query: query,
+            },
+        })
+        .done((response) => {
+            console.log(response);
+            data = JSON.parse(response["data"]);
+            data.forEach(element => {
+                let thumbnail = $(`<img src=${element["thumb"]} />`);
+                $("#results").append(thumbnail);
+            });
+        })
+    })
+    
+    $("#search-bar").keyup( (e) => { 
+        query = $("#search-bar")[0].value
+    });
 
 });

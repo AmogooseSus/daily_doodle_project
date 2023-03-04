@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.views import View
 from dailydoodle.models import *
 from django.shortcuts import redirect
@@ -103,6 +103,13 @@ class Draw(View):
     # handle submissions of drawings
     @method_decorator(login_required)
     def post(self,request):
+        name = request.POST.get("name")
+        if(name == "submit"):
+            return self.handle_submission(request)
+        elif(name == "search"):
+            return self.handle_reference_request(request)
+      
+    def handle_submission(self,request):
         prompt = Prompt.objects.filter(prompt_date=date.today())[0]
         user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
         if(len(user_drawing) != 0):
@@ -114,6 +121,11 @@ class Draw(View):
             sub.write(image)
         Drawing.objects.create(user=request.user,prompt=prompt,drawing=f"/submissions/{request.user}-{prompt}.jpeg",drawing_id=f"{request.user.username}-{prompt}")
         return HttpResponse("REDIRECT")
+    
+    def handle_reference_request(self,request):
+        data = get_references(request.POST.get("query"))
+        print(data)
+        return JsonResponse({"data": json.dumps(data)})
 
     
 # Class view for viewing a Drawing
