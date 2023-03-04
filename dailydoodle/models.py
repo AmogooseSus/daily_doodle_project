@@ -18,16 +18,7 @@ def handle_user_deletion(sender,instance,**kwargs):
     except:
         print("user profile was default")
 
-#Add a signal when a drawing is deleted (DOES NOT WORK AS EXPECTED)
-@receiver(pre_delete,sender=User)
-def handle_drawing_deletion(sender,instance,**kwargs):
-    try: 
-        dir = f"{settings.MEDIA_ROOT}/submissions/{instance.drawing_id}.jpeg"
-        dir.replace("\\","/")
-        print(dir)
-        os.remove(dir)
-    except:
-            print("could not delete drawing file")
+
 
 # UserProfile model to store profile picture of every user
 class UserProfile(models.Model):
@@ -56,6 +47,18 @@ class Drawing(models.Model):
     drawing_id = models.CharField(max_length=61,unique=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     prompt = models.ForeignKey(Prompt,on_delete=models.CASCADE)
+
+
+#Add a signal when a drawing is deleted
+@receiver(pre_delete,sender=Drawing)
+def handle_drawing_deletion(sender,instance,**kwargs):
+    try: 
+        dir = f"{settings.MEDIA_ROOT}/submissions/{instance.drawing_id}.jpeg"
+        dir.replace("\\","/")
+        print(dir)
+        os.remove(dir)
+    except:
+            print("could not delete drawing file")
 
 
 # Comment model
