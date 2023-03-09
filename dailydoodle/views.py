@@ -23,7 +23,7 @@ import base64
 class Index(View):
 
     def get(self,request):
-        context_dict = {}
+        context_dict = {"current_link": "Homepage"}
         # get top 5 drawings (use helper function) and add them to context dict
         # get todays prompt 
         prompt = Prompt.objects.filter(prompt_date=date.today())[0]
@@ -45,9 +45,10 @@ class Collections(View):
 
     @method_decorator(login_required)
     def get(self,request):
+        context_dict = {"current_link": "Collections"}
         # get intial n prompts using helper function and add to context dict
         # get intial n drawings using helper function and add to context dictionary
-        return render(request,"dailydoodle/collections.html")
+        return render(request,"dailydoodle/collections.html",context=context_dict)
     
     # Also add method for handling searching of prompts, getting more prompts and getting more drawings
 
@@ -56,10 +57,14 @@ class Collections(View):
 class Submissions(View):
 
     def get(self,request,username):
+        if(username == request.user.username):
+            context_dict = {"current_link": "My Submissions"}
+        else:
+            context_dict = {}
         # get user 
         # get intial n drawings user has participated in
         # get intial n prompts user has participated in
-        return render(request,"dailydoodle/submissions.html")
+        return render(request,"dailydoodle/submissions.html",context=context_dict)
     
     # Also add method for handling searching of prompts and getting more prompts
 
@@ -69,8 +74,9 @@ class Submissions(View):
 class LeaderBoard(View):
 
     def get(self,request):
+        context_dict = {"current_link": "Leaderboard"}
         # logic here needs more thinking 
-        return render(request,"dailydoodle/leaderboard.html")
+        return render(request,"dailydoodle/leaderboard.html",context=context_dict)
     
     # Also add method for handling searching of users via post request
     
@@ -79,8 +85,9 @@ class LeaderBoard(View):
 class Profile(View):
 
     def get(self,request):
+        context_dict = {"current_link": "Profile"}
         # simply return users username,email and profile picture
-        return render(request,"dailydoodle/profile.html") 
+        return render(request,"dailydoodle/profile.html",context=context_dict) 
     
     # Also add method for handling profile changes
 
@@ -142,12 +149,19 @@ class DrawingView(View):
 # This allows use to redirect to making a user profile
 class RegistrationView(RegistrationView):
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context["current_link"] = "Register"
+        return context
+
     def get_success_url(self,user):
         #for each user we associate a profile picture of format username.jpg
         #intially we get a random profile picture using an api
         media_url = get_random_profile_picture(user.username)
         profile = UserProfile.objects.create(user=user,profile_picture=media_url)
         return reverse("dailydoodle:index")
+
 
 
 
