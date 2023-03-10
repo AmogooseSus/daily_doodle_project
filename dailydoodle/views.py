@@ -106,7 +106,7 @@ class Draw(View):
         prompt = Prompt.objects.filter(prompt_date=date.today())[0]
         user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
         if(len(user_drawing) != 0):
-            print("drawing alreayd exists")
+            print("drawing already exists")
             return HttpResponse("REDIRECT")
         image = request.POST.get("imageBase64").replace("data:image/jpeg;base64,","")
         image = base64.b64decode(image)
@@ -121,8 +121,10 @@ class DrawingView(View):
 
     def get(self,request):
         # use parameters to get drawing and other useful details
+        userDrawing=f"/submissions/{request.user}-{prompt}.jpeg"
         return render(request,"dailydoodle/drawing.html")
     
+    def 
     # Also add methods for handling post requests e.g comments ,upvotes etc
 
 
