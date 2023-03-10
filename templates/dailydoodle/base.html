@@ -25,22 +25,27 @@
                  secondary_contrast: "#D84E60",
                  secondary_gray: "#E4C4C8",
                  canvas: "#B1B4C6",
-              }
-            }
+              },
+            },
           }
         }
       </script>
 </head>
-<body class="flex flex-row h-screen w-screen">
-    {% block optional_overide %}
+<body class="bg-extra_blue bg-[url('{% static "/icons/random-shapes.svg" %}')] bg-scroll bg-fixed">
+  <main class="flex flex-col h-screen">
+    <div class="flex flex-1 overflow-hidden">
     {% get_nav current_link user %}
-    {% endblock %}
-    <div id="main">
-    {% block body_block %}
-    {% endblock %}
+
+      <div class="flex h-full w-full flex-row">
+        <div id="main" class="w-full h-full  overflow-y-auto ml-20 mt-8">
+        {% block body_block %}
+        {% endblock %}
+        </div>
+      </div>
+      <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
+      {% block script_block %}
+      {% endblock %}
     </div>
-    <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
-    {% block script_block %}
-    {% endblock %}
+  </main> 
 </body>
 </html>

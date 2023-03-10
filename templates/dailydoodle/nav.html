@@ -1,9 +1,9 @@
 {% load staticfiles %}
-<nav class="flex flex-col bg-main h-full w-1/6">
+<nav class="flex flex-col bg-main w-1/6">
     {% if user.username %}
-    <div class="flex flex-row p-4">
-        <img class="" src="{{ MEDIA_URL}}{{user_profile_picture}}" alt="Profile Picture" />
-        <h1 class="text-secondary_gray">{{ user.username }}</h1>
+    <div class="flex flex-row p-4 items-center">
+        <img class="rounded-lg h-16 w-20" src="{{ MEDIA_URL}}{{user_profile_picture}}" alt="Profile Picture" />
+        <h1 class="ml-4 break-all text-secondary_gray">{{ user.username }}</h1>
     </div>
     {% endif %}
 
