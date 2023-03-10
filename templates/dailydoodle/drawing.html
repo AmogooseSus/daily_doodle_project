@@ -4,5 +4,17 @@ Home
 {% endblock %}
 
 {% block body_block %}
-Content for drawing 
+{% csrf_token %} 
+<h1>{{ prompt }}</h1>
+<h2>{{ userDrawing }}</h2>
+
+<form>
+    <label for="comment">Comment:</label>
+    <input type="text" id="comment" name="comment">
+</form>
+
+<button id="upvote">Upvote</button>
+
+<button id="submit">Submit comment</button>
+
 {% endblock %}
