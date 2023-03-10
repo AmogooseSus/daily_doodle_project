@@ -3,10 +3,14 @@
 Home
 {% endblock %}
 
+{% block link %}
+Homepage
+{% endblock %}
+
 {% block body_block %}
 {{ prompt }}
 {% if user_drawing %}
-    <img src={{MEDIA_URL}}{{user_drawing}}
+    <img src={{MEDIA_URL}}{{user_drawing}} />
 {% else %}
     <button><a href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
 {% endif %}

@@ -1,8 +1,12 @@
 {% extends 'dailydoodle/base.html' %}
+{% load daily_doodle_tags %}
 {% block title_block %}
     Login
 {% endblock %}
 
+{% comment %} {% block optional_overide %}
+{% get_nav "Login" user%}
+{% endblock %} {% endcomment %}
 {% block body_block %}
 <h1>Login</h1>
 

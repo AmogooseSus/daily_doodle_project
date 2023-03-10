@@ -10,17 +10,42 @@
         {% block title_block %}
         {% endblock %}
     </title>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                 main : '#1B1F3B',
+                 main_gray: "#C0D0E7",
+                 compliment: "#454ADE",
+                 extra_blue: "#374395",
+                 secondary: "#9947C9",
+                 secondary_compliment: "#C874D9",
+                 secondary_contrast: "#D84E60",
+                 secondary_gray: "#E4C4C8",
+                 canvas: "#B1B4C6",
+              },
+            },
+          }
+        }
+      </script>
 </head>
-<body>
+<body class="bg-extra_blue bg-[url('{% static "/icons/random-shapes.svg" %}')] bg-scroll bg-fixed">
+  <main class="flex flex-col h-screen">
+    <div class="flex flex-1 overflow-hidden">
     {% get_nav current_link user %}
-    <div id="main">
-    {% block body_block %}
-    {% endblock %}
+
+      <div class="flex h-full w-full flex-row">
+        <div id="main" class="w-full h-full  overflow-y-auto ml-20 mt-8">
+        {% block body_block %}
+        {% endblock %}
+        </div>
+      </div>
+      <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
+      {% block script_block %}
+      {% endblock %}
     </div>
-    <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
-    {% block script_block %}
-    {% endblock %}
+  </main> 
 </body>
 </html>

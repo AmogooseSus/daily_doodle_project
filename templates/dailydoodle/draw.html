@@ -16,8 +16,19 @@ Draw
 <input type="range" min="1" max="50" value="5" id="pen-size" /> 
 <input type="range" min="1" max="50" value="10" id="eraser-size" /> 
 <input type="color" value="#000000" id="color" />
-<button id="submit">Submit</button>
+<button id="submit" name="submit">Submit</button>
 
+<div>
+<input type="text" name="search" id="search-bar" />
+<button id="search" name="search">Search photots</button>
+<div id="results">
+
+</div>
+
+<div id="selected">
+
+</div>
+</div>
 {% endblock %}
 {% block script_block %}
 <script src="{% static "js/draw_logic.js" %}"></script>
