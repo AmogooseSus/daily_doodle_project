@@ -4,6 +4,7 @@ from django.views import View
 from dailydoodle.models import *
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views as auth_views 
 from django.urls import reverse
 from registration.backends.simple.views import RegistrationView
 from django.utils.decorators import method_decorator
@@ -160,7 +161,6 @@ class RegistrationView(RegistrationView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
         context["current_link"] = "Register"
         return context
 
@@ -172,7 +172,11 @@ class RegistrationView(RegistrationView):
         return reverse("dailydoodle:index")
 
 
+# Class view that extends the login functionality mainly to add the current link for nav
+class LoginView(auth_views.LoginView):
 
-
-# Class view that extends the logout functionality so we instantly redirect user back to homescreen
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_link"] = "Login"
+        return context
 
