@@ -152,7 +152,7 @@ class DrawingView(View):
         userDrawing=f"/submissions/{request.user}-{prompt}.jpeg"
         return render(request,"dailydoodle/drawing.html")
     
-    def 
+    # def 
     # Also add methods for handling post requests e.g comments ,upvotes etc
 
 

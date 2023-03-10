@@ -8,23 +8,36 @@ Homepage
 {% endblock %}
 
 {% block body_block %}
-<section class="flex flex-col">
-<div class="flex flex-row justify-between">
+<section class="flex flex-col  mt-8">
+<div class="flex flex-row justify-between gap-x-56">
     <div class="flex flex-col">
-        <h4>Todays Prompt</h4>
-        <h1>{{ prompt }}</h1>
-        <button><a href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
+        <h4 class="text-xs">Todays Prompt</h4>
+        <h1 class="font-extrabold text-6xl text-white">{{ prompt }}</h1>
+        <button class="mt-8 bg-secondary_contrast px-2 py-1 rounded-lg font-medium text-secondary_gray shadow-lg"><a href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
     </div>
-    <div>
+    <div class="flex  flex-col justify-start items-start mr-20">
         {% if user_drawing %}
-            <h4>Your Submission</h4>
-            <img src={{MEDIA_URL}}{{user_drawing}} class="h-24 w-24" />
+            <h4 class="text-xs self-start">Your Submission</h4>
+            <img src={{MEDIA_URL}}{{user_drawing}} class="h-72 w-full rounded-lg shadow-lg" />
         {% endif %}
     </div>
 </div>
 
-<div>
-
+<div class="flex flex-col mx-32 my-32">
+    <h4 class="text-xs">Todays Top 5</h4>
+    <div class="flex flex-col justify-start items-start mt-4">
+        {% if user_drawing %}
+            <div id="" class="flex z-1 justify-center w-full ">
+                <div class="clickable h-4 w-4 bg-white"></div>
+                <div class="clickable h-4 w-4 bg-white"></div>
+                <div class="clickable h-4 w-4 bg-white"></div>
+                <div class="clickable h-4 w-4 bg-white"></div>
+                <div class="clickable h-4 w-4 bg-white"></div>
+            </div>
+            <img src={{MEDIA_URL}}{{user_drawing}} class="h-84 w-4/5 rounded-lg shadow-lg" />
+        {% endif %}
+    </div>
 </div>
+
 </section>
 {% endblock %}
