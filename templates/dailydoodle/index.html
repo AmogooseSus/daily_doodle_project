@@ -8,10 +8,23 @@ Homepage
 {% endblock %}
 
 {% block body_block %}
-{{ prompt }}
-{% if user_drawing %}
-    <img src={{MEDIA_URL}}{{user_drawing}} />
-{% else %}
-    <button><a href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
-{% endif %}
+<section class="flex flex-col">
+<div class="flex flex-row justify-between">
+    <div class="flex flex-col">
+        <h4>Todays Prompt</h4>
+        <h1>{{ prompt }}</h1>
+        <button><a href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
+    </div>
+    <div>
+        {% if user_drawing %}
+            <h4>Your Submission</h4>
+            <img src={{MEDIA_URL}}{{user_drawing}} class="h-24 w-24" />
+        {% endif %}
+    </div>
+</div>
+
+<div>
+
+</div>
+</section>
 {% endblock %}
