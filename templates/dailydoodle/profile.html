@@ -1,8 +1,14 @@
 {% extends "dailydoodle/base.html" %}
+{% load staticfiles %}
 {% block title_block %}
-Home
+Profile
 {% endblock %}
 
 {% block body_block %}
-Content for profile
+    {% csrf_token %} 
+    <h1>Profile</h1>
+    <div>
+        {{ username }} </br>
+        {{ email }}
+    </div>
 {% endblock %}

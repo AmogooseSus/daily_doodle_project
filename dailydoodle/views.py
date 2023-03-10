@@ -87,6 +87,15 @@ class Profile(View):
     def get(self,request):
         context_dict = {"current_link": "Profile"}
         # simply return users username,email and profile picture
+<<<<<<< Updated upstream
+=======
+        currUser:User = request.user
+        context_dict = {}
+        userName = User.get_username(currUser)
+        email = currUser.email
+        context_dict["username"] = userName
+        context_dict["email"] = email
+>>>>>>> Stashed changes
         return render(request,"dailydoodle/profile.html",context=context_dict) 
     
     # Also add method for handling profile changes
