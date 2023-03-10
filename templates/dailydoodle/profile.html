@@ -9,6 +9,7 @@ Profile
     <h1>Profile</h1>
     <div>
         {{ username }} </br>
-        {{ email }}
+        {{ email }} <br>
+        <img src = {{MEDIA_URL}}{{ user_profile_picture }} alt="Profile picture"/>
     </div>
 {% endblock %}

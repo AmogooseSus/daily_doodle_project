@@ -94,6 +94,8 @@ class Profile(View):
         email = currUser.email
         context_dict["username"] = userName
         context_dict["email"] = email
+        user_profile_picture = UserProfile.objects.filter(user=currUser)[0].profile_picture
+        context_dict["user_profile_picture"] = user_profile_picture
         return render(request,"dailydoodle/profile.html",context=context_dict) 
     
     # Also add method for handling profile changes
