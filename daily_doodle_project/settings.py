@@ -122,6 +122,7 @@ REGISTRATION_OPEN = True
 REIGSTRATION_AUTO_LOGIN = True
 LOGIN_REDIRECT_URL = "dailydoodle:index"
 LOGIN_URL = "auth_login"
+LOGOUT_REDIRECT_URL = "dailydoodle:index"
 
 
 # Internationalization

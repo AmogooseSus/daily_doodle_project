@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.views import View
 from dailydoodle.models import *
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views as auth_views 
 from django.urls import reverse
 from registration.backends.simple.views import RegistrationView
 from django.utils.decorators import method_decorator
@@ -23,7 +24,7 @@ import base64
 class Index(View):
 
     def get(self,request):
-        context_dict = {}
+        context_dict = {"current_link": "Homepage"}
         # get top 5 drawings (use helper function) and add them to context dict
         # get todays prompt 
         prompt = Prompt.objects.filter(prompt_date=date.today())[0]
@@ -45,9 +46,10 @@ class Collections(View):
 
     @method_decorator(login_required)
     def get(self,request):
+        context_dict = {"current_link": "Collections"}
         # get intial n prompts using helper function and add to context dict
         # get intial n drawings using helper function and add to context dictionary
-        return render(request,"dailydoodle/collections.html")
+        return render(request,"dailydoodle/collections.html",context=context_dict)
     
     # Also add method for handling searching of prompts, getting more prompts and getting more drawings
 
@@ -55,11 +57,15 @@ class Collections(View):
 # Class view for any users submissions
 class Submissions(View):
 
-    def get(self,request):
+    def get(self,request,username):
+        if(username == request.user.username):
+            context_dict = {"current_link": "My Submissions"}
+        else:
+            context_dict = {}
         # get user 
         # get intial n drawings user has participated in
         # get intial n prompts user has participated in
-        return render(request,"dailydoodle/submissions.html")
+        return render(request,"dailydoodle/submissions.html",context=context_dict)
     
     # Also add method for handling searching of prompts and getting more prompts
 
@@ -69,8 +75,9 @@ class Submissions(View):
 class LeaderBoard(View):
 
     def get(self,request):
+        context_dict = {"current_link": "Leaderboard"}
         # logic here needs more thinking 
-        return render(request,"dailydoodle/leaderboard.html")
+        return render(request,"dailydoodle/leaderboard.html",context=context_dict)
     
     # Also add method for handling searching of users via post request
     
@@ -79,8 +86,15 @@ class LeaderBoard(View):
 class Profile(View):
 
     def get(self,request):
+        context_dict = {"current_link": "Profile"}
         # simply return users username,email and profile picture
-        return render(request,"dailydoodle/profile.html") 
+        currUser:User = request.user
+        context_dict = {}
+        userName = User.get_username(currUser)
+        email = currUser.email
+        context_dict["username"] = userName
+        context_dict["email"] = email
+        return render(request,"dailydoodle/profile.html",context=context_dict) 
     
     # Also add method for handling profile changes
 
@@ -103,6 +117,13 @@ class Draw(View):
     # handle submissions of drawings
     @method_decorator(login_required)
     def post(self,request):
+        name = request.POST.get("name")
+        if(name == "submit"):
+            return self.handle_submission(request)
+        elif(name == "search"):
+            return self.handle_reference_request(request)
+      
+    def handle_submission(self,request):
         prompt = Prompt.objects.filter(prompt_date=date.today())[0]
         user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
         if(len(user_drawing) != 0):
@@ -114,6 +135,11 @@ class Draw(View):
             sub.write(image)
         Drawing.objects.create(user=request.user,prompt=prompt,drawing=f"/submissions/{request.user}-{prompt}.jpeg",drawing_id=f"{request.user.username}-{prompt}")
         return HttpResponse("REDIRECT")
+    
+    def handle_reference_request(self,request):
+        data = get_references(request.POST.get("query"))
+        print(data)
+        return JsonResponse({"data": json.dumps(data)})
 
     
 # Class view for viewing a Drawing
@@ -132,6 +158,11 @@ class DrawingView(View):
 # This allows use to redirect to making a user profile
 class RegistrationView(RegistrationView):
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_link"] = "Register"
+        return context
+
     def get_success_url(self,user):
         #for each user we associate a profile picture of format username.jpg
         #intially we get a random profile picture using an api
@@ -140,6 +171,11 @@ class RegistrationView(RegistrationView):
         return reverse("dailydoodle:index")
 
 
+# Class view that extends the login functionality mainly to add the current link for nav
+class LoginView(auth_views.LoginView):
 
-# Class view that extends the logout functionality so we instantly redirect user back to homescreen
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_link"] = "Login"
+        return context
 

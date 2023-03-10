@@ -130,9 +130,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-migrations/*
-
-submissions/*
-
-.jpg
-.jpeg
+# Django media and db stuff
+media/submissions/*
+media/profile_images/*.jpg
+dailydoodle/migrations/*
