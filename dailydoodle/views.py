@@ -20,14 +20,20 @@ import base64
 # NOTE any class views that don't benifit from using class based syntax will
 # be reverted to a function
 
+# TODO replace all filter where we want only element with .objects.get()
+
 # Class view for homepage 
 class Index(View):
 
     def get(self,request):
+        # get todays prompt 
+        prompt = Prompt.objects.get(prompt_date=date.today())
         context_dict = {"current_link": "Homepage"}
         # get top 5 drawings (use helper function) and add them to context dict
-        # get todays prompt 
-        prompt = Prompt.objects.filter(prompt_date=date.today())[0]
+        top_drawings = Drawing.objects.filter(prompt=prompt).order_by("-total_upvotes")[:5].values()
+        for x in top_drawings:
+            x["user_profile_picture"] = UserProfile.objects.get(user_id=x["user_id"]).profile_picture
+            x["username"] = User.objects.get(id=x["user_id"]).username
         if(request.user.username):
             # get users submission if exists or add none to context dict
             user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
@@ -38,6 +44,7 @@ class Index(View):
                 context_dict["user_drawing"]  = None
         context_dict["prompt"] = prompt.prompt 
         context_dict["MEDIA_URL"] = MEDIA_URL
+        context_dict["top_drawings"] = {"amount": len(top_drawings), "top": top_drawings}
         return render(request,"dailydoodle/index.html",context=context_dict)
     
 

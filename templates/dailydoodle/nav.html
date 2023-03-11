@@ -3,7 +3,7 @@
     {% if user.username %}
     <div class="flex flex-row p-4 items-center">
         <img class="rounded-lg h-16 w-20" src="{{ MEDIA_URL}}{{user_profile_picture}}" alt="Profile Picture" />
-        <h1 class="ml-4 break-all text-secondary_gray">{{ user.username }}</h1>
+        <h1 class="ml-4 break-all text-secondary_gray text-center font-semibold">{{ user.username }}</h1>
     </div>
     {% endif %}
 

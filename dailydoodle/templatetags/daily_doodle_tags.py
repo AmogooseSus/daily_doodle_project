@@ -45,3 +45,7 @@ def get_nav(current_link=None,user=None):
     all_links = {"Homepage": ["dailydoodle:index",svgs["Homepage"]]}
     non_locked_links = {"Register": ["registration_register",svgs["Register"]],"Login": ["auth_login",svgs["Login"]]}
     return {"all_links": all_links,"non_locked_links": non_locked_links,"locked_links": locked_links,"current_link": current_link,"user":user,"user_profile_picture":user_profile_picture,"MEDIA_URL": MEDIA_URL}
+
+@register.inclusion_tag("dailydoodle/user_snippet.html")
+def user_snippet(user_profile_picture=None,username=None,upvotes=None,):
+    return {"username": username, "user_profile_picture": user_profile_picture, "upvotes": upvotes ,"MEDIA_URL": MEDIA_URL}
