@@ -15,8 +15,10 @@ Homepage
     <div class="flex flex-col">
         <h4 class="text-xs">Todays Prompt</h4>
         <h1 class="font-extrabold text-6xl text-white">{{ prompt }}</h1>
-        <button class="mt-8 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg"><a href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
-    </div>
+        {% if not user_drawing %}
+            <button class="mt-8 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg"><a class="block" href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
+        {% endif %}
+        </div>
     <div class="flex  flex-col justify-start items-start mr-20">
         {% if user_drawing %}
             <h4 class="text-xs self-start">Your Submission</h4>
@@ -33,9 +35,9 @@ Homepage
                 <div class="flex flex-row w-full justify-center">
                 {% for k in top_drawings.top %}
                 {% if forloop.first%}
-                 <div class="clickable h-4 w-4 bg-white rounded-lg mx-1 shadow-lg" data-drawing="{{k.drawing_id}}" id="intial"></div>
+                 <div class="clickable h-4 w-4 bg-white hover:bg-white rounded-lg mx-1 shadow-lg" data-drawing="{{k.drawing_id}}" id="intial"></div>
                 {% else %}
-                    <div class="clickable h-4 w-4 bg-indigo-100 hover:bg-white rounded-lg mx-1 shadow-lg  opacity-50"></div>
+                    <div class="clickable h-4 w-4 bg-indigo-100 hover:bg-white rounded-lg mx-1 shadow-lg opacity-50" data-drawing="{{k.drawing_id}}"></div>
                 {% endif %}
                 {% endfor %}
                 </div>
