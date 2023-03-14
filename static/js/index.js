@@ -1,22 +1,31 @@
 $().ready(() => {
     // properties for chosen top drawing
-    let chosen = $("#intial").data("drawing");
-    let chosen_index = 0;
+    let chosenElement = $("#intial");
+    let previousId = null;
+    let chosenId = $("#intial").data("drawing");
 
     // register event handlers for every next button
-    $(".clickable").each(() => {
-        $(this).click((e) => {
-            chosen = $(this).attr("id")
-            $(".clickable").each(() => {
-                $(this).attr
-            })
-            switch_drawing()
+    $(".clickable").each(function() {
+        $(this).click(function(e)  {
+            if($(this) !== $(chosenElement)) {
+                $(chosenElement).removeClass("bg-white");
+                $(chosenElement).addClass("bg-indigo-100");
+                $(chosenElement).addClass("opacity-50");
+                previousId = chosenId;
+                chosenElement = $(this);
+                $(chosenElement).removeClass("bg-indigo-100 opacity-50");
+                $(chosenElement).addClass("bg-white");
+                chosenId = $(chosenElement).data("drawing");
+                switch_drawing()
+            }
         })
     })
     
 
     function switch_drawing() {
-        // hide all sections
-        // get the drawing section with id of chosen and set class to show 
+        // hide previous section
+        $("#" + previousId).addClass("hidden")
+        // show current section
+        $("#" + chosenId).removeClass("hidden")
     }
 })  
