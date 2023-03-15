@@ -1,4 +1,5 @@
 {% extends "dailydoodle/base.html" %}
+{% load staticfiles %}
 {% block title_block %}
 Home
 {% endblock %}
@@ -6,19 +7,19 @@ Home
 {% block body_block %}
 {% csrf_token %} 
 <h1>{{ prompt }}</h1>
-<h2>{{ userDrawing }}</h2>
+<h2>{{ user }}</h2>
 
-<form>
+<div>
     <label for="comment">Comment:</label>
-    <input type="text" id="comment" name="comment">
-</form>
+    <input type="text" id="comment" name="comment" data-drawing_id="{{user_drawing.drawing_id}}">
+    <button id="submit">Submit Comment</button>
+</div>
 
-<button id="upvote">Upvote</button>
+<button id="upvote" name="upvote">Upvote</button>
 
-<button id="submit">Submit comment</button>
 
-<template>
-    
-</template>
+{% endblock %}
 
+{% block script_block %}
+<script src="{% static "js/drawing.js" %}"></script>
 {% endblock %}

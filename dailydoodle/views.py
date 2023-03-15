@@ -10,7 +10,7 @@ from registration.backends.simple.views import RegistrationView
 from django.utils.decorators import method_decorator
 from dailydoodle.apis import *
 from dailydoodle.view_helpers import *
-from datetime import date
+from datetime import date,datetime
 from daily_doodle_project.settings import MEDIA_URL,MEDIA_ROOT
 import base64
 
@@ -154,13 +154,23 @@ class Draw(View):
 # Class view for viewing a Drawing
 class DrawingView(View):
 
-    def get(self,request):
-        # use parameters to get drawing and other useful details
-        userDrawing=f"/submissions/{request.user}-{prompt}.jpeg"
-        return render(request,"dailydoodle/drawing.html")
-    
-    # def 
+    def get(self,request,drawing_id):
+        context_dict = {}
+        prompt = Prompt.objects.filter(prompt_date=date.today())[0].prompt
+        user_drawing = Drawing.objects.get(drawing_id=drawing_id)
+        comments = Comment.objects.filter(drawing=drawing_id)
+        print(prompt, user_drawing, comments)
+        context_dict["prompt"] = prompt
+        context_dict["user_drawing"] = user_drawing
+        context_dict["comments"] = comments
+        return render(request,"dailydoodle/drawing.html",context=context_dict)
+
     # Also add methods for handling post requests e.g comments ,upvotes etc
+    def post(self,request):
+        print(request.POST)
+        name = request.POST.get("name")
+        # if(name == "comment"):
+        #     Comment.objects.create(user=request.user,comment=request.POST.get("comment_text"),date=datetime.now(),drawing=request.POST.get("drawing_id"))
 
 
 # Class view that extends the register functionality
