@@ -13,6 +13,7 @@ from dailydoodle.view_helpers import *
 from datetime import date
 from daily_doodle_project.settings import MEDIA_URL,MEDIA_ROOT
 import base64
+from django.db.models import Avg, Max, Min
 
 
 # Create your views here.
@@ -98,9 +99,18 @@ class Submissions(View):
 # Class view for leadboards
 class LeaderBoard(View):
 
+    @method_decorator(login_required)
     def get(self,request):
         context_dict = {"current_link": "Leaderboard"}
-        # logic here needs more thinking 
+        # retrieve the top 10 users
+        users = UserProfile.objects.filter(upvotes_recieved__gt=1).order_by("-upvotes_recieved")[:5]
+        # retrieve their top most liked drawing 
+        most_liked_drawings = []
+        for user in users:
+            most_liked_drawings.append(Drawing.objects.filter(user=user.user).order_by("-total_upvotes")[0])
+        data = zip(users,most_liked_drawings)
+        context_dict["data"] = data
+        context_dict["amount"] = len(users)
         return render(request,"dailydoodle/leaderboard.html",context=context_dict)
     
     # Also add method for handling searching of users via post request
