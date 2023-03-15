@@ -26,6 +26,15 @@ $().ready(() => {
     let redoTop = -1;
     let undoStack = [];
     let undoTop = -1;
+
+    // svg tool colours
+    let picked = "#D84E60";
+    let unpicked = "#374395";
+
+    // references list
+    let references = []
+    let max_amount = 3;
+
     
     $("#canvas").mousedown((e) => {
         mouseDown = true;
@@ -63,17 +72,6 @@ $().ready(() => {
         ctx.stroke();
     }
 
-    // function handle_pencil(e) {
-    //     ctx.lineTo(e.offsetX,e.offsetY);
-    //     ctx.stroke();
-       
-    // }
-
-    // function handle_eraser(e) {
-       
-    //     ctx.lineTo(e.offsetX,e.offsetY);
-    //     ctx.stroke();
-    // }
 
     // event listeners for tool changes and tool adjusters
     $("#pen-size").change((e) => {
@@ -84,12 +82,16 @@ $().ready(() => {
         eraserWidth =  $("#eraser-size")[0].value
     })
 
-    $("#pencil").click((e) => {
+    $("#pencil").click(function() {
         tool_selected = pencil;
+        $(this).children().children().attr("fill",picked);
+        $("#eraser").children().children().attr("fill",unpicked);
     })
 
-    $("#eraser").click((e) => {
+    $("#eraser").click(function() {
         tool_selected = eraser;
+        $(this).children().children().attr("fill",picked);
+        $("#pencil").children().children().attr("fill",unpicked);
     })
 
     $("#clear").click((e) => {
@@ -174,7 +176,12 @@ $().ready(() => {
     // reference image searching funtionality
     let query = $("#search-bar")[0].value
     $("#search").click((e) => {
+        if(query.length <= 0) return;
         console.log(query)
+        if(! (references.length < max_amount)) {
+            alert("You already have 3 max references");
+            return;
+        }
         $.ajax({
             type: "POST",
             url: "/dailydoodle/draw/",
@@ -187,8 +194,13 @@ $().ready(() => {
         .done((response) => {
             console.log(response);
             data = JSON.parse(response["data"]);
+            $("#results").html("");
+            $("#results-container").removeClass("hidden");
             data.forEach(element => {
-                let thumbnail = $(`<img src=${element["thumb"]} />`);
+                let thumbnail = $(`<img src=${element["thumb"]} class="rounded-lg mt-2"/>`);
+                $(thumbnail).click(function(e) {
+                    addToReferences(this);
+                })
                 $("#results").append(thumbnail);
             });
         })
@@ -198,4 +210,24 @@ $().ready(() => {
         query = $("#search-bar")[0].value
     });
 
+    $("#close-search").click(function(e) {
+        $("#results-container").addClass("hidden");
+    })
+
+    function addToReferences(image) {
+        if(! (references.length < max_amount)) return;
+        references.push(image);
+        if(references.length >= max_amount) {
+            $("#results-container").addClass("hidden");
+        }
+        renderReferences();
+    }
+
+    function renderReferences() {
+        references.forEach((element) => {
+             $("#selected").append(element);
+        })
+    }
+    
 });
+

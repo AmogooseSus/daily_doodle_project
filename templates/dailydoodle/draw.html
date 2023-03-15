@@ -6,29 +6,80 @@ Draw
 
 {% block body_block %}
 {% csrf_token %} 
-<h1>{{ prompt }}</h1>
-<canvas id="canvas" height="500px" width="900px"></canvas>
-<button id="pencil">Pencil</button>
-<button id="eraser">Eraser</button>
-<button id="clear">Clear</button>
-<button id="undo">Undo</button>
-<button id="redo">Redo</button>
-<input type="range" min="1" max="50" value="5" id="pen-size" /> 
-<input type="range" min="1" max="50" value="10" id="eraser-size" /> 
-<input type="color" value="#000000" id="color" />
-<button id="submit" name="submit">Submit</button>
-
-<div>
-<input type="text" name="search" id="search-bar" />
-<button id="search" name="search">Search photots</button>
-<div id="results">
-
+<div class="relative z-1 hidden" id="results-container">
+    <div class="absolute bg-main z-1 top-32 h-[70vh] w-[70vw] overflow-y-scroll p-8 rounded-lg ">
+        <div class="flex flex-row justify-end m-2 ">
+        <button class="bg-secondary_contrast p-2 rounded-full" id="close-search">Close</button>
+        </div>
+        <div id="results" class="grid auto-rows-auto grid-cols-3 gap-2">
+        </div>
+    </div>
 </div>
+<section class="flex flex-row mt-16 h-full w-full">
+    <div>
+        <h6 class="text-xs">Search References</h6>
+        <div class="flex flex-row bg-main p-2 rounded-full items-center">
+        <input type="text" name="search" id="search-bar" class="bg-main " />
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path opacity="0.4" d="M11.6665 4.16666H16.6665" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path opacity="0.4" d="M11.6665 6.66666H14.1665" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17.4998 9.58332C17.4998 13.9583 13.9582 17.5 9.58317 17.5C5.20817 17.5 1.6665 13.9583 1.6665 9.58332C1.6665 5.20832 5.20817 1.66666 9.58317 1.66666" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path opacity="0.4" d="M18.3332 18.3333L16.6665 16.6667" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>            
+        </div>
+        <button id="search" name="search">Search photots</button>
+        <div id="selected"> 
 
-<div id="selected">
+        </div>
+    </div>
+    
 
-</div>
-</div>
+    <div class="flex flex-col h-full w-full items-center">
+        <h1 class="text-white text-5xl font-bold mb-8">{{ prompt }}</h1>
+
+        <canvas id="canvas" class="h-3/5 w-3/4 rounded-lg shadow-lg self-center"></canvas>
+
+        <div class="flex flex-row w-4/5 justify-evenly mt-2 ">
+            <button id="clear" class="bg-main rounded-lg p-2 group"><svg class="h-10 w-10" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path id="clear-svg" class="group-hover:fill-secondary_contrast" d="M21 3.5C17.5388 3.5 14.1554 4.52636 11.2775 6.44928C8.39967 8.37221 6.15665 11.1053 4.83212 14.303C3.50758 17.5007 3.16102 21.0194 3.83627 24.4141C4.51151 27.8087 6.17822 30.9269 8.62564 33.3744C11.0731 35.8218 14.1913 37.4885 17.5859 38.1637C20.9806 38.839 24.4993 38.4924 27.697 37.1679C30.8947 35.8434 33.6278 33.6003 35.5507 30.7225C37.4736 27.8446 38.5 24.4612 38.5 21C38.5 18.7019 38.0474 16.4262 37.1679 14.303C36.2884 12.1798 34.9994 10.2507 33.3744 8.62563C31.7493 7.00061 29.8202 5.71157 27.697 4.83211C25.5738 3.95265 23.2981 3.5 21 3.5ZM27.4925 25.0075C27.6565 25.1702 27.7867 25.3637 27.8756 25.577C27.9644 25.7902 28.0102 26.019 28.0102 26.25C28.0102 26.481 27.9644 26.7098 27.8756 26.923C27.7867 27.1363 27.6565 27.3298 27.4925 27.4925C27.3298 27.6565 27.1363 27.7867 26.923 27.8756C26.7098 27.9644 26.481 28.0101 26.25 28.0101C26.019 28.0101 25.7902 27.9644 25.577 27.8756C25.3637 27.7867 25.1702 27.6565 25.0075 27.4925L21 23.485L16.9925 27.4925C16.8298 27.6565 16.6363 27.7867 16.423 27.8756C16.2098 27.9644 15.981 28.0101 15.75 28.0101C15.519 28.0101 15.2902 27.9644 15.077 27.8756C14.8637 27.7867 14.6702 27.6565 14.5075 27.4925C14.3435 27.3298 14.2133 27.1363 14.1244 26.923C14.0356 26.7098 13.9899 26.481 13.9899 26.25C13.9899 26.019 14.0356 25.7902 14.1244 25.577C14.2133 25.3637 14.3435 25.1702 14.5075 25.0075L18.515 21L14.5075 16.9925C14.178 16.663 13.9928 16.216 13.9928 15.75C13.9928 15.284 14.178 14.837 14.5075 14.5075C14.837 14.178 15.284 13.9928 15.75 13.9928C16.216 13.9928 16.663 14.178 16.9925 14.5075L21 18.515L25.0075 14.5075C25.337 14.178 25.784 13.9928 26.25 13.9928C26.716 13.9928 27.163 14.178 27.4925 14.5075C27.822 14.837 28.0072 15.284 28.0072 15.75C28.0072 16.216 27.822 16.663 27.4925 16.9925L23.485 21L27.4925 25.0075Z" fill="#374395"/>
+                </svg>
+            </button>
+            <button id="eraser" class="bg-main rounded-lg p-2 group"><svg class="h-8 w-10" viewBox="0 0 37 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path  id="eraser-svg" class="group-hover:fill-secondary_contrast" d="M11.8704 9.21941L27.7802 25.1292L21.2844 31.625H33.4997C34.5352 31.625 35.3747 32.4644 35.3747 33.5C35.3747 34.5356 34.5352 35.375 33.4997 35.375H12.6748C11.9288 35.375 11.2135 35.0788 10.686 34.5513L1.26388 25.1291C-0.20059 23.6647 -0.20059 21.2902 1.26388 19.8258L11.8704 9.21941ZM25.1287 1.26423L35.7352 11.8708C37.1998 13.3353 37.1998 15.7096 35.7352 17.1742L30.4318 22.4776L14.5221 6.56778L19.8255 1.26423C21.2899 -0.200239 23.6642 -0.200239 25.1287 1.26423Z" fill="#374395"/>
+                </svg>
+            </button>
+            <button id="pencil" class="bg-main rounded-lg p-2 group"><svg class="h-8 w-10" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path  id="pencil-svg1" class="group-hover:fill-secondary_contrast" d="M25.4453 0.785952C26.1668 0.487136 26.94 0.333336 27.7208 0.333336C28.5017 0.333336 29.2748 0.487136 29.9963 0.785952C30.7177 1.08477 31.3732 1.52275 31.9253 2.07489C32.4775 2.62702 32.9155 3.2825 33.2143 4.00392C33.513 4.72532 33.6668 5.49852 33.6668 6.27935C33.6668 7.06019 33.513 7.83339 33.2143 8.5548C32.9155 9.2762 32.4775 9.93169 31.9253 10.4838L31.0617 11.3474L22.6528 2.93847L23.5163 2.07489C24.0685 1.52275 24.724 1.08477 25.4453 0.785952Z" fill="#D84E60"/>
+                <path  id="pencil-svg2"  class="group-hover:fill-secondary_contrast" d="M20.2958 5.2955L3.09116 22.5002C2.88606 22.7052 2.73804 22.9603 2.66173 23.2402L0.39226 31.5615C0.234893 32.1385 0.398777 32.7557 0.821693 33.1785C1.24461 33.6015 1.86171 33.7653 2.43873 33.608L10.7601 31.3385C11.0399 31.2622 11.295 31.1142 11.5001 30.909L28.7047 13.7045L20.2958 5.2955Z" fill="#D84E60"/>
+                </svg>
+            </button> 
+            <button id="undo" class="bg-main rounded-lg p-2 group"><svg class="h-8 w-10" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path  id="undo-svg" class="group-hover:fill-secondary_contrast" fill-rule="evenodd" clip-rule="evenodd" d="M12.6321 0.618323C13.438 1.44278 13.438 2.77945 12.6321 3.6039L7.90043 8.44444H23.5546C31.5326 8.44444 38 15.0607 38 23.2222C38 31.3838 31.5326 38 23.5546 38H11.4904C10.3507 38 9.42677 37.0549 9.42677 35.8889C9.42677 34.7229 10.3507 33.7778 11.4904 33.7778H23.5546C29.2533 33.7778 33.8727 29.0518 33.8727 23.2222C33.8727 17.3926 29.2533 12.6667 23.5546 12.6667H7.90043L12.6321 17.5072C13.438 18.3316 13.438 19.6684 12.6321 20.4928C11.8262 21.3172 10.5196 21.3172 9.7137 20.4928L0 10.5556L9.7137 0.618323C10.5196 -0.206108 11.8262 -0.206108 12.6321 0.618323Z" fill="#374395"/>
+                </svg>
+            </button>
+            <button id="redo" class="bg-main rounded-lg p-2 group"><svg class="h-8 w-10" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path  id="redo-svg" class="group-hover:fill-secondary_contrast" fill-rule="evenodd" clip-rule="evenodd" d="M25.3679 0.618323C24.562 1.44278 24.562 2.77945 25.3679 3.6039L30.0996 8.44444L14.4454 8.44444C6.46741 8.44444 0 15.0607 0 23.2222C0 31.3838 6.46741 38 14.4454 38H26.5096C27.6493 38 28.5732 37.0549 28.5732 35.8889C28.5732 34.7229 27.6493 33.7778 26.5096 33.7778H14.4454C8.74669 33.7778 4.12725 29.0518 4.12725 23.2222C4.12725 17.3926 8.74669 12.6667 14.4454 12.6667L30.0996 12.6667L25.3679 17.5072C24.562 18.3316 24.562 19.6684 25.3679 20.4928C26.1738 21.3172 27.4804 21.3172 28.2863 20.4928L38 10.5556L28.2863 0.618323C27.4804 -0.206108 26.1738 -0.206108 25.3679 0.618323Z" fill="#374395"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="flex flex-row mt-16 justify-evenly w-4/5 ">
+            <div class="flex flex-col bg-main p-8 w-1/4 rounded-lg ">
+                <h5 class="text-s">Pen Size</h5>
+                <input type="range" min="1" max="50" value="5" id="pen-size" class="rounded-lg accent-secondary_contrast appearance-none bg-extra_blue"/> 
+                <h5 class="text-s mt-4">Eraser Size</h5>
+                <input type="range" min="1" max="50" value="10" id="eraser-size" class="rounded-lg accent-secondary_contrast appearance-none bg-extra_blue" /> 
+            </div>
+            <div class="flex flex-col bg-main p-8 w-1/4 rounded-lg items-center justify-evenly">
+                <h5>Colour</h5>
+                <input type="color" value="#000000" id="color" class="rounded appearance-none border-none"/>
+                <h6 class="text-xs">click top pick!</h6>
+            </div>
+        </div>
+
+        <button class="mt-8 bg-secondary_contrast px-4 py-2 rounded-lg font-medium text-secondary_gray shadow-lg w-1/6" id="submit" name="submit">Submit!</button>
+    </div>
+</section>
 {% endblock %}
 {% block script_block %}
 <script src="{% static "js/draw_logic.js" %}"></script>
