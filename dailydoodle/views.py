@@ -181,6 +181,7 @@ class Draw(View):
 # Class view for viewing a Drawing
 class DrawingView(View):
 
+    @method_decorator(login_required)
     def get(self,request,drawing_id):
         context_dict = {}
         prompt = Prompt.objects.filter(prompt_date=date.today())[0].prompt
@@ -193,11 +194,27 @@ class DrawingView(View):
         return render(request,"dailydoodle/drawing.html",context=context_dict)
 
     # Also add methods for handling post requests e.g comments ,upvotes etc
-    def post(self,request):
+    @method_decorator(login_required)
+    def post(self,request,drawing_id):
         print(request.POST)
         name = request.POST.get("name")
-        # if(name == "comment"):
-        #     Comment.objects.create(user=request.user,comment=request.POST.get("comment_text"),date=datetime.now(),drawing=request.POST.get("drawing_id"))
+        if(name == "comment"):
+            return self.handle_comment(request,drawing_id)
+        elif(name == "upvote"):
+            return self.handle_upvote(request,drawing_id)
+
+    def handle_comment(self,request,drawing_id):
+        Comment.objects.create(user=request.user,comment=request.POST.get("comment_text"),date=datetime.now(),drawing=Drawing.objects.get(drawing_id=drawing_id))
+        return HttpResponse("OK")
+    
+    def handle_upvote(self,request,drawing_id):
+        rating = Rating.objects.filter(user=request.user,drawing=Drawing.objects.get(drawing_id=drawing_id))
+        if(len(rating) == 0):
+            Rating.objects.create(user=request.user,drawing=Drawing.objects.get(drawing_id=drawing_id))
+            return JsonResponse({"upvotes":  Drawing.objects.get(drawing_id=drawing_id).total_upvotes})
+        else:
+            Rating.objects.get(user=request.user,drawing=Drawing.objects.get(drawing_id=drawing_id)).delete()
+            return JsonResponse({"upvotes":  Drawing.objects.get(drawing_id=drawing_id).total_upvotes})
 
 
 # Class view that extends the register functionality

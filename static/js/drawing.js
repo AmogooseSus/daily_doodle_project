@@ -1,5 +1,16 @@
 $().ready(() => {
 
+    let upvoteText = $("#upvotes-display")[0]
+    let drawing_id =  $("#comment").data("drawing_id");
+
+    function renderComments(commentData) {
+
+    }
+
+    function handleUpvoteText(amount) {
+        $("#upvotes-display").text(amount);
+    }
+
     // used to get csrf token from cookies
     function getCookie(name) {
         let value = null;
@@ -17,22 +28,35 @@ $().ready(() => {
         return value;
     }
 
-
-    // Create a post request to submit the drawing then rediect to homepage
+    // Create a post request to save the comment for this drawing we then re render the comments so user doesn't have to refresh
     $("#submit").click((e) => {
         let comment_text = $("#comment")[0].value;
-        let drawing_id =  $("#comment").data("drawing_id");
         $.ajax({
             type: "POST",
             url: `/dailydoodle/drawing/${drawing_id}`,
             headers: {"X-CSRFToken": getCookie("csrftoken")},
             data: {
-                name: "comment",
+               name: "comment",
                comment_text: comment_text,
-               drawing_id: drawing_id
             },
         }).done((e) => {
             console.log("saved comment");
+            renderComments();
+        })
+    })
+
+    $("#upvote").click((e) => {
+        $.ajax({
+            type: "POST",
+            url: `/dailydoodle/drawing/${drawing_id}`,
+            headers: {"X-CSRFToken": getCookie("csrftoken")},
+            data: {
+               name: "upvote",
+            },
+        }).done((response) => {
+            upvotes = JSON.parse(response["upvotes"]);
+            console.log(upvotes)
+            handleUpvoteText(upvotes);
         })
     })
 })  
