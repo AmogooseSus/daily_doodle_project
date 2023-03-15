@@ -1,8 +1,15 @@
 {% extends "dailydoodle/base.html" %}
+
 {% block title_block %}
 Home
 {% endblock %}
 
 {% block body_block %}
-Content for submissions
+  <h1>My Pictures</h1>
+  {% for drawing in drawings %}
+    <img src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}">
+  {% empty %}
+    <p>No pictures yet.</p>
+  {% endfor %}
+
 {% endblock %}

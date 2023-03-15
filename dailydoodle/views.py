@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse, HttpResponseRedirect
 from django.views import View
 from dailydoodle.models import *
 from django.shortcuts import redirect
@@ -53,28 +53,45 @@ class Collections(View):
 
     @method_decorator(login_required)
     def get(self,request):
+        if not request.user.is_authenticated:
+            # Redirect to home
+            return HttpResponseRedirect(reverse('dailydoodle:index'))
+
         context_dict = {"current_link": "Collections"}
+
+        drawings = Drawing.objects.filter(drawing__icontains='')
+        print(len(drawings))
+        context_dict['drawings'] = drawings
+
+        return render(request, "dailydoodle/collections.html", context=context_dict)
         # get intial n prompts using helper function and add to context dict
         # get intial n drawings using helper function and add to context dictionary
-        return render(request,"dailydoodle/collections.html",context=context_dict)
-    
-    # Also add method for handling searching of prompts, getting more prompts and getting more drawings
+        # Also add method for handling searching of prompts, getting more prompts and getting more drawings
 
 
 # Class view for any users submissions
 class Submissions(View):
 
     def get(self,request,username):
+        if not request.user.is_authenticated:
+            # Redirect to login page or handle anonymous user
+            return HttpResponseRedirect(reverse('dailydoodle:index'))
+
         if(username == request.user.username):
             context_dict = {"current_link": "My Submissions"}
         else:
             context_dict = {}
+
+        drawings = Drawing.objects.filter(user=request.user)
+        print(len(drawings))
+
+        context_dict['drawings'] = drawings
+
+        return render(request, "dailydoodle/submissions.html", context=context_dict)
         # get user 
         # get intial n drawings user has participated in
         # get intial n prompts user has participated in
-        return render(request,"dailydoodle/submissions.html",context=context_dict)
-    
-    # Also add method for handling searching of prompts and getting more prompts
+        # Also add method for handling searching of prompts and getting more prompts
 
 
 
