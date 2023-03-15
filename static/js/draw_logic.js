@@ -26,6 +26,9 @@ $().ready(() => {
     let redoTop = -1;
     let undoStack = [];
     let undoTop = -1;
+
+    // svgs for tools
+    
     
     $("#canvas").mousedown((e) => {
         mouseDown = true;
@@ -63,17 +66,6 @@ $().ready(() => {
         ctx.stroke();
     }
 
-    // function handle_pencil(e) {
-    //     ctx.lineTo(e.offsetX,e.offsetY);
-    //     ctx.stroke();
-       
-    // }
-
-    // function handle_eraser(e) {
-       
-    //     ctx.lineTo(e.offsetX,e.offsetY);
-    //     ctx.stroke();
-    // }
 
     // event listeners for tool changes and tool adjusters
     $("#pen-size").change((e) => {
@@ -133,6 +125,13 @@ $().ready(() => {
         }
     
     })
+
+    function refillSvgs() {
+         switch(tool_selected) {
+            case pencil:
+
+         }
+    }
 
 
     // used to get csrf token from cookies
@@ -198,4 +197,6 @@ $().ready(() => {
         query = $("#search-bar")[0].value
     });
 
+    
 });
+
