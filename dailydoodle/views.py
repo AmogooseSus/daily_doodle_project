@@ -83,7 +83,7 @@ class Submissions(View):
         else:
             context_dict = {}
 
-        drawings = Drawing.objects.filter(user=request.user)
+        drawings = Drawing.objects.filter(user=request.user).order_by('-prompt__prompt_date')
         user_profile = UserProfile.objects.get(user=request.user)
         name = user_profile.user.username
         user_pic = user_profile.profile_picture

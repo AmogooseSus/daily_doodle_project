@@ -20,7 +20,7 @@ Submissions
     <p>No pictures yet.</p>
   {% endfor %}
 
-    {% for x in drawings|slice:":5" %}
+    {% for x in drawings|slice:"1:5" %}
     <p>Drawing ID: {{ x.drawing_id }}</p>
     {% endfor %}
 
