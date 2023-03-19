@@ -84,9 +84,16 @@ class Submissions(View):
             context_dict = {}
 
         drawings = Drawing.objects.filter(user=request.user)
-        print(len(drawings))
+        user_profile = UserProfile.objects.get(user=request.user)
+        name = user_profile.user.username
+        user_pic = user_profile.profile_picture
+        upvotes_received = user_profile.upvotes_recieved
 
+        context_dict['user_pic'] = user_pic
+        context_dict['upvotes'] = upvotes_received
+        context_dict['username'] = name
         context_dict['drawings'] = drawings
+        context_dict['MEDIA_URL'] = MEDIA_URL
 
         return render(request, "dailydoodle/submissions.html", context=context_dict)
         # get user 

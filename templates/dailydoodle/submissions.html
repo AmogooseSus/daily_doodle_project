@@ -1,15 +1,28 @@
 {% extends "dailydoodle/base.html" %}
-
+{% load staticfiles %}
+{% load daily_doodle_tags %}
 {% block title_block %}
-Home
+Submissions
 {% endblock %}
 
 {% block body_block %}
-  <h1>My Pictures</h1>
-  {% for drawing in drawings %}
-    <img src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}">
+  <div class="flex flex-row w-full justify-left mb-8 mt-8">
+    {% user_snippet user_pic username upvotes %}
+  </div>
+  {% for drawing in drawings|slice:":1" %}
+    <div class="relative">
+      <img src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}" class="rounded-lg shadow-lg" />
+      <button class="absolute bottom-0 left-1/4 transform -translate-x-1/2 translate-y-1/2 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg">
+        <a class="block" href="{% url 'dailydoodle:drawing' drawing_id=drawing.drawing_id %}">See Details</a>
+      </button>
+    </div>
   {% empty %}
     <p>No pictures yet.</p>
   {% endfor %}
 
+    {% for x in drawings|slice:":5" %}
+    <p>Drawing ID: {{ x.drawing_id }}</p>
+    {% endfor %}
+
 {% endblock %}
+
