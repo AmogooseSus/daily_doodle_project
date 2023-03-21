@@ -88,12 +88,16 @@ class Submissions(View):
         name = user_profile.user.username
         user_pic = user_profile.profile_picture
         upvotes_received = user_profile.upvotes_recieved
+        total_upvotes = 0
+        for each in drawings:
+            total_upvotes += each.total_upvotes
 
         context_dict['user_pic'] = user_pic
         context_dict['upvotes'] = upvotes_received
         context_dict['username'] = name
         context_dict['drawings'] = drawings
         context_dict['MEDIA_URL'] = MEDIA_URL
+        context_dict['total_upvotes'] = total_upvotes
 
         return render(request, "dailydoodle/submissions.html", context=context_dict)
         # get user 

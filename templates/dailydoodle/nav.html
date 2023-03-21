@@ -13,12 +13,12 @@
             <div class="bg-compliment p-2 rounded-lg flex flex-row items-center mt-2">
                 {{v.1 | safe}}
                 <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
-            </div> 
+            </div>
             {% else %}
                 <div class=" p-2 rounded-lg flex flex-row items-center mt-2">
                     {{v.1 | safe}}
                     <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
-                </div> 
+                </div>
             {% endif %}
         {% endfor %}
         {%if user.username%}
@@ -31,7 +31,7 @@
                     {% else %}
                         <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
                     {% endif %}
-                </div> 
+                </div>
                 {% else %}
                     <div class="p-2 rounded-lg flex flex-row items-center mt-2">
                         {{v.1 | safe}}
@@ -40,7 +40,7 @@
                          {% else %}
                         <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
                          {% endif %}
-                    </div> 
+                    </div>
                 {% endif %}
                 {% endfor %}
         {% else %}
@@ -49,14 +49,14 @@
                     <div class="bg-compliment p-2 rounded-lg flex flex-row items-center mt-2">
                         {{v.1 | safe}}
                         <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
-                    </div> 
+                    </div>
                     {% else %}
                         <div class=" p-2 rounded-lg flex flex-row items-center mt-2">
                             {{v.1 | safe}}
                             <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
-                        </div> 
+                        </div>
                     {% endif %}
-                    {% endfor %}    
+                    {% endfor %}
         {% endif %}
     </div>
 </nav>
