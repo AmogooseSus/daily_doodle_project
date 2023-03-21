@@ -130,7 +130,7 @@ class LeaderBoard(View):
 
 # Class view for profile
 class Profile(View):
-
+    @method_decorator(login_required)
     def get(self,request):
         context_dict = {"current_link": "Profile"}
         # simply return users username,email and profile picture
