@@ -17,12 +17,16 @@
     <!--make a list of the other drawings the user has done -->
     <div class="flex flex-row justify-end">
         <div class="w-1/4">
-            <div style="max-height: 600px; overflow-y: auto; position: absolute; z-index: 1;">
+            <div style="max-height: 600px; overflow-y: auto; position: absolute; z-index: 1; border-left: 10px solid #0b1228; padding: 10px; height: 100%;">
                 {% for x in drawings|slice:":5" %}
-                    <p>{{ x.prompt.prompt_date|date:"d/m/y" }} <br>
+                    <p style="font-size: 16px; ">
+                        {{ x.prompt.prompt_date|date:"d/m/y" }} <br>
                         <a class="block" href="#"
                            onclick="updateDisplayedImage('{{ x.drawing.url }}', '{{ x.drawing_id }}', {{ x.total_upvotes }})"
-                           data-upvotes="{{ x.total_upvotes }}">{{ x.drawing_id }}</a>
+                           style="font-weight: bold; font-size: 21px"
+                           data-upvotes="{{ x.total_upvotes }}"
+                           onmouseover="this.style.backgroundColor='rgba(221,221,221,0.2)';"
+                           onmouseout="this.style.backgroundColor='transparent';">{{ x.drawing_id }}</a>
                         <br><br>
                     </p>
                 {% endfor %}
