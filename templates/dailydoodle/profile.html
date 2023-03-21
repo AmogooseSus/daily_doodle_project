@@ -10,6 +10,7 @@ Profile
     <div>
         {{ username }} </br>
         {{ email }} <br>
-        <img src = {{MEDIA_URL}}{{ user_profile_picture }} alt="Profile picture"/>
+        <img class="rounded-lg h-28 w-32" src = {{MEDIA_URL}}{{ user_profile_picture }} alt="Profile picture"/>
+        <!-- User profile will need to call update photo on click-->
     </div>
 {% endblock %}
