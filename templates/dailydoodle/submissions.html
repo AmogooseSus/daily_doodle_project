@@ -26,7 +26,7 @@
                            style="font-weight: bold; font-size: 21px"
                            data-upvotes="{{ x.total_upvotes }}"
                            onmouseover="this.style.backgroundColor='rgba(221,221,221,0.2)';"
-                           onmouseout="this.style.backgroundColor='transparent';">{{ x.drawing_id }}</a>
+                           onmouseout="this.style.backgroundColor='transparent';">{{ x.drawing_id|cut:username|cut:"-"|capfirst}}</a>
                         <br><br>
                     </p>
                 {% endfor %}

@@ -92,6 +92,7 @@ class Submissions(View):
         for each in drawings:
             total_upvotes += each.total_upvotes
 
+
         context_dict['user_pic'] = user_pic
         context_dict['upvotes'] = upvotes_received
         context_dict['username'] = name
