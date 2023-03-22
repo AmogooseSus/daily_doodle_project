@@ -1,0 +1,20 @@
+<nav class="flex  lg:flex-col flex-row lg:w-1/6 sm:w-full overflow-y-auto ">
+
+
+<div class="w-2 h-fill bg-black ">
+    {% for prompt in prompts %}
+        <div class="flex flex-row mt-16 ml-4 items-center">
+         <div>
+         <h2 class="text-s text-main_gray">{{ prompt.prompt_date|date:"d/m/y" }}</h2>
+
+         <div class="flex flex-row items-center" >
+            <div class="h-4 w-4 rounded-full mr-2 bg-secondary_contrast"></div>
+            <h1 class="hover:text-secondary_contrast hover:cursor-pointer text-xl font-medium dynamic-change" data-prompt="{{prompt.prompt}}">{{ prompt.prompt }}</h1>
+         </div>
+
+         </div>
+        </div>
+    {% endfor %}
+</div>
+
+</nav>

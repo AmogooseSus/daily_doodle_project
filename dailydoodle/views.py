@@ -82,6 +82,9 @@ class Submissions(View):
 
         required_user = User.objects.get(username=username)
         drawings = Drawing.objects.filter(user=required_user).order_by('-prompt__prompt_date')
+        all_prompts = []
+        for drawing in drawings:
+            all_prompts.append(Prompt.objects.get(prompt=drawing.prompt.prompt))
         user_profile = UserProfile.objects.get(user=required_user)
         name = user_profile.user.username
         user_pic = user_profile.profile_picture
@@ -92,6 +95,7 @@ class Submissions(View):
         context_dict['username'] = name
         context_dict['drawings'] = drawings
         context_dict['MEDIA_URL'] = MEDIA_URL
+        context_dict["all_prompts"] = all_prompts
 
         return render(request, "dailydoodle/submissions.html", context=context_dict)
         # get user 

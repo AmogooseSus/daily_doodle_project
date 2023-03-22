@@ -49,3 +49,7 @@ def get_nav(current_link=None,user=None):
 @register.inclusion_tag("dailydoodle/user_snippet.html")
 def user_snippet(user_profile_picture=None,username=None,upvotes=None,):
     return {"username": username, "user_profile_picture": user_profile_picture, "upvotes": upvotes ,"MEDIA_URL": MEDIA_URL}
+
+@register.inclusion_tag("dailydoodle/prompt_timeline.html")
+def prompt_timeline(prompts):
+    return {"prompts": prompts}
