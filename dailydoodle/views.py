@@ -73,32 +73,25 @@ class Collections(View):
 # Class view for any users submissions
 class Submissions(View):
 
+    @method_decorator(login_required)
     def get(self,request,username):
-        if not request.user.is_authenticated:
-            # Redirect to login page or handle anonymous user
-            return HttpResponseRedirect(reverse('dailydoodle:index'))
-
         if(username == request.user.username):
             context_dict = {"current_link": "My Submissions"}
         else:
             context_dict = {}
 
-        drawings = Drawing.objects.filter(user=request.user).order_by('-prompt__prompt_date')
-        user_profile = UserProfile.objects.get(user=request.user)
+        required_user = User.objects.get(username=username)
+        drawings = Drawing.objects.filter(user=required_user).order_by('-prompt__prompt_date')
+        user_profile = UserProfile.objects.get(user=required_user)
         name = user_profile.user.username
         user_pic = user_profile.profile_picture
         upvotes_received = user_profile.upvotes_recieved
-        total_upvotes = 0
-        for each in drawings:
-            total_upvotes += each.total_upvotes
-
-
+        
         context_dict['user_pic'] = user_pic
         context_dict['upvotes'] = upvotes_received
         context_dict['username'] = name
         context_dict['drawings'] = drawings
         context_dict['MEDIA_URL'] = MEDIA_URL
-        context_dict['total_upvotes'] = total_upvotes
 
         return render(request, "dailydoodle/submissions.html", context=context_dict)
         # get user 
@@ -115,7 +108,7 @@ class LeaderBoard(View):
     def get(self,request):
         context_dict = {"current_link": "Leaderboard"}
         # retrieve the top 10 users
-        users = UserProfile.objects.filter(upvotes_recieved__gt=1).order_by("-upvotes_recieved")[:5]
+        users = UserProfile.objects.filter(upvotes_recieved__gte=1).order_by("-upvotes_recieved")[:10]
         # retrieve their top most liked drawing 
         most_liked_drawings = []
         for user in users:
@@ -126,6 +119,33 @@ class LeaderBoard(View):
         return render(request,"dailydoodle/leaderboard.html",context=context_dict)
     
     # Also add method for handling searching of users via post request
+    @method_decorator(login_required)
+    def post(self,request):
+        name = request.POST.get("name")
+        if(name == "search"):
+            return self.handle_search(request)
+    
+    def handle_search(self,request):
+        query = request.POST.get("query")
+        all_users = UserProfile.objects.filter(upvotes_recieved__gt=0).order_by("-upvotes_recieved").values()
+        users = User.objects.filter(username__icontains=query).values()
+        user_profiles = {}
+        for x in users:
+            profile = UserProfile.objects.get(user=x["id"])
+            position = 1
+            # determine position by adding to position from ordered set of profiles
+            for user in all_users:
+                if(user["user_id"] == x["id"]):
+                    break 
+                position += 1
+            user_profiles[x["username"]] = {"position": position,"username": x["username"],"profile_picture": profile.profile_picture.url,"upvotes_recieved": profile.upvotes_recieved}
+            user_drawings = Drawing.objects.filter(user=x["id"])
+            if(len(user_drawings) != 0):
+                user_profiles[x["username"]]["most_liked_drawing"] =  user_drawings[0].prompt.prompt
+            else:
+                user_profiles[x["username"]]["most_liked_drawing"] = None
+        data = {"user_data": user_profiles}
+        return JsonResponse(data)
     
 
 # Class view for profile

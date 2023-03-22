@@ -1,4 +1,5 @@
 {% extends "dailydoodle/base.html" %}
+{% load staticfiles %}
 {% block title_block %}
 Home
 {% endblock %}
@@ -26,7 +27,7 @@ Home
         <h3>Total Upvotes</h3>
     </div>
 
-    <div id="users-results" class="w-11/12 h-auto mt-4 flex flex-col divide-y divide-extra_blue divid-y-2 hidden">
+    <div id="search-results" class="w-11/12 h-auto mt-4 flex flex-col divide-y divide-extra_blue divid-y-2 hidden">
 
     </div>
 
@@ -39,7 +40,7 @@ Home
             {% endif %}
                 <h2>{{forloop.counter}}</h2>
                 <div class="flex flex-row p-4 items-center">
-                    <img class="rounded-lg h-8 w-10" src="{{ MEDIA_URL}}{{user.user_profile_picture}}" alt="Profile Picture" />
+                    <img class="rounded-lg h-8 w-10" src="{{ MEDIA_URL}}{{user.profile_picture}}" alt="Profile Picture" />
                     <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold">{{ user.user.username }}</h1>
                 </div>
                 <h2>{{drawing.prompt}}</h2>
@@ -49,4 +50,9 @@ Home
     </div>
 
 </section>
+{% endblock %}
+
+{% block script_block %} 
+    <script src="{% static "js/leaderboard.js" %}">
+    </script>
 {% endblock %}
