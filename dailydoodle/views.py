@@ -13,7 +13,6 @@ from dailydoodle.view_helpers import *
 from datetime import date,datetime
 from daily_doodle_project.settings import MEDIA_URL,MEDIA_ROOT
 import base64
-from django.db.models import Avg, Max, Min
 
 
 # Create your views here.
@@ -54,20 +53,21 @@ class Collections(View):
 
     @method_decorator(login_required)
     def get(self,request):
-        if not request.user.is_authenticated:
-            # Redirect to home
-            return HttpResponseRedirect(reverse('dailydoodle:index'))
-
         context_dict = {"current_link": "Collections"}
-
-        drawings = Drawing.objects.filter(drawing__icontains='')
-        print(len(drawings))
-        context_dict['drawings'] = drawings
-
-        return render(request, "dailydoodle/collections.html", context=context_dict)
-        # get intial n prompts using helper function and add to context dict
-        # get intial n drawings using helper function and add to context dictionary
-        # Also add method for handling searching of prompts, getting more prompts and getting more drawings
+        prompts = Prompt.objects.all().order_by("-prompt_date")
+        drawings = self.get_latest_drawings(prompts)
+        context_dict["prompts"] = prompts
+        context_dict["prompt_drawings"]  = drawings
+        print(drawings)
+        return render(request, "dailydoodle/collections.html", context=context_dict) 
+    
+    def get_latest_drawings(self,prompts):
+        drawings = {}
+        for prompt in prompts:
+            prompt_drawings = Drawing.objects.filter(prompt=prompt).values()
+            drawings[prompt.prompt] = prompt_drawings
+        return drawings
+    
 
 
 # Class view for any users submissions
@@ -98,10 +98,6 @@ class Submissions(View):
         context_dict["all_prompts"] = all_prompts
 
         return render(request, "dailydoodle/submissions.html", context=context_dict)
-        # get user 
-        # get intial n drawings user has participated in
-        # get intial n prompts user has participated in
-        # Also add method for handling searching of prompts and getting more prompts
 
 
 
