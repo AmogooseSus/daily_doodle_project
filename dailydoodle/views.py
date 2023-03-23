@@ -194,7 +194,7 @@ class Profile(View):
             return JsonResponse("Changed Username Succesfully",safe=False)
         
     def handle_password_change(self,request):
-        requested_change = request.post.get("changed_password")
+        requested_change = request.POST.get("password_change")
         request.user.set_password(requested_change)
         request.user.save()
         return JsonResponse("Changed Password Succesfully")
