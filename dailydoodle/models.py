@@ -12,18 +12,19 @@ from django.dispatch import receiver
 def handle_user_deletion(sender,instance,**kwargs):
     # delete the stored profile picture on delete 
     try:
-        dir = f"{settings.MEDIA_ROOT}/profile_images/{instance.username}.jpg"
-        dir.replace("\\","/")      
-        os.remove(dir)
+        profile = UserProfile.objects.get(user=instance)
+        profile.profile_picture.delete()
     except:
         print("user profile was default")
 
-
+def rename_path(instance,filename):
+    file_type = filename[filename.rfind("."):]
+    return f"profile_images/{instance.user.username}{file_type}"
 
 # UserProfile model to store profile picture of every user
 class UserProfile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to="profile_images",blank=True)
+    profile_picture = models.ImageField(upload_to=rename_path,blank=True)
     # we add this to query top users easily, however Rating table must be used to get relation between user and drawing upvote
     upvotes_recieved = models.IntegerField(default=0)
 
@@ -31,9 +32,6 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
     
-    # def save(self, *args, **kwargs):
-    #     # resize the profile_picture to the desired resolution
-
 
 # Prompt model
 class Prompt(models.Model):
@@ -58,10 +56,7 @@ class Drawing(models.Model):
 @receiver(pre_delete,sender=Drawing)
 def handle_drawing_deletion(sender,instance,**kwargs):
     try: 
-        dir = f"{settings.MEDIA_ROOT}/submissions/{instance.drawing_id}.jpeg"
-        dir.replace("\\","/")
-        print(dir)
-        os.remove(dir)
+        instance.drawing.delete()
     except:
             print("could not delete drawing file")
 

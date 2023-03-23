@@ -5,13 +5,23 @@ Profile
 {% endblock %}
 
 {% block body_block %}
-     
-    <h1>Profile</h1>
+<section class="mt-8 flex flex-col items-center">
+    <h1 class="text-6xl font-bold text-white">Profile</h1>
+
+    <div class="w-1/2">
     <div>
-        {{ username }} </br>
-        {{ email }} <br>
-        <img class="rounded-lg h-28 w-32" src = {{MEDIA_URL}}{{ user_profile_picture }} alt="Profile picture"/>
         <!-- User profile will need to call update photo on click-->
+        <img id="user-image" class="rounded-lg h-28 w-32 hover:opacity-80 hover:cursor-pointer" src = {{MEDIA_URL}}{{ user_profile_picture }} alt="Profile picture"  />
+        <form method="POST" enctype="multipart/form-data" action=".">
+            {% csrf_token %}
+            <input name="picture" class="hidden" type="file" id="pic-changer" accept="image/jpeg"/>
+            <input type="submit" id="submit" value="change_pic" />
+        </form>
+        <div>
+        {{ username }} 
+        {{ email }} 
+        </div>
+       
     </div>
     <div>
         <form id = "change_username" method="post" name="username_change" action="." class="flex flex-col justify-evenly h-full items-center">
@@ -37,5 +47,17 @@ Profile
                 <br />
             </div>
         </form>
+        
+        <form method="post" action="." class="flex">
+            {% csrf_token %}
+            <input type="submit" name="delete_account" value="delete_account" />
+        </form>
     </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block script_block %}
+<script src="{% static "js/profile.js" %}">
+</script>
 {% endblock %}

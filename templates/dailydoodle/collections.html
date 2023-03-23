@@ -13,9 +13,9 @@ Collections
           <div class="w-full h-full  mt-16 flex flex-col items-center ">
             {% for prompt_drawing,value in prompt_drawings.items %}
               {% if forloop.counter == 1%}
-              <div id="{{ prompt_drawing }}" class="dynamic grid lg:grid-cols-2 grid-cols-1  "> 
+              <div id="{{ prompt_drawing }}" class="dynamic grid lg:grid-cols-2 grid-cols-1  gap-4"> 
               {% else %}
-              <div id="{{ prompt_drawing }}" class="dynamic hidden grid lg:grid-cols-2 grid-cols-1 ">
+              <div id="{{ prompt_drawing }}" class="dynamic hidden grid lg:grid-cols-2 grid-cols-1 gap-4">
               {% endif %}
                       {% for drawing in value %}
                             <img id="{{ drawing.drawing_id}}"src="{{MEDIA_URL}}{{ drawing.drawing }}" alt="{{ drawing.title }}"

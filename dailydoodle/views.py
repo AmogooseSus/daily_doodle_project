@@ -162,42 +162,59 @@ class Profile(View):
         context_dict["email"] = email
         user_profile_picture = UserProfile.objects.filter(user=currUser)[0].profile_picture
         context_dict["user_profile_picture"] = user_profile_picture
+        context_dict["MEDIA_URL"] = MEDIA_URL
         return render(request,"dailydoodle/profile.html",context=context_dict) 
     
     # Also add method for handling profile changes
     @method_decorator(login_required)
     def post(self,request):
-        print(request.POST)
-        print("new username: ",request.POST.get("username_change"))
-        print("new password: ",request.POST.get("password_change"))
-        name = request.POST.get("username_change")
+        user_name = request.POST.get("username_change")
         password = request.POST.get("password_change")
-        if(name != None):
+        delete = request.POST.get("delete_account")
+        if(user_name != None):
             print("Handle username change")
             return self.handle_username_change(request)
         elif(password != None):
             print("handle password change")
             return self.handle_password_change(request)
+        elif(request.FILES.get("picture",None)):
+            self.handle_picture_change(request)
+        elif(delete != None):
+            request.user.delete()
+        return redirect("dailydoodle:profile")
     
     def handle_username_change(self,request):
         requested_change = request.POST.get("username_change")
         existings = User.objects.filter(username=requested_change)
         print("Checking if username is taken")
         if(len(existings) != 0):
-            return JsonResponse("USERNAME ALREADY TAKEN")
+            return redirect(reverse("dailydoodle:profile") + "?changed_username=failed" )
         else:
             print("Username is good to go")
             request.user.username = requested_change
             print("changed up. Request chang: ",requested_change)
             request.user.save()
             print("Saved")
-            return JsonResponse("Changed Username Succesfully",safe=False)
+            return redirect(reverse("dailydoodle:profile") + "?changed_username=successs" )
         
     def handle_password_change(self,request):
-        requested_change = request.post.get("changed_password")
+        requested_change = request.POST.get("password_change")
         request.user.set_password(requested_change)
         request.user.save()
-        return JsonResponse("Changed Password Succesfully")
+        return redirect(reverse("dailydoodle:profile") + "?changed_username=successs")
+    
+
+    def handle_picture_change(self,request):
+        profile = UserProfile.objects.get(user=request.user)
+        try:
+            dir = f"{settings.MEDIA_ROOT}/{profile.profile_picture}"
+            dir.replace("\\","/")      
+            os.remove(dir)
+        except:
+            print("user profile was default")
+        profile.profile_picture = request.FILES["picture"]
+        profile.save()
+        return redirect(reverse("dailydoodle:profile") + "?changed_profile=success")
     
 
 # Class view for Draw mode
@@ -278,6 +295,9 @@ class DrawingView(View):
         return HttpResponse("OK")
     
     def handle_upvote(self,request,drawing_id):
+        drawing = Drawing.objects.get(drawing_id=drawing_id)
+        if(drawing.user == request.user):
+            return JsonResponse({"upvotes": drawing.total_upvotes})
         rating = Rating.objects.filter(user=request.user,drawing=Drawing.objects.get(drawing_id=drawing_id))
         if(len(rating) == 0):
             Rating.objects.create(user=request.user,drawing=Drawing.objects.get(drawing_id=drawing_id))
