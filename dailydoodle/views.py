@@ -155,9 +155,8 @@ class Profile(View):
     def get(self,request):
         context_dict = {"current_link": "Profile"}
         # simply return users username,email and profile picture
-        currUser:User = request.user
-        context_dict = {}
-        userName = User.get_username(currUser)
+        currUser = request.user
+        userName = currUser.username
         email = currUser.email
         context_dict["username"] = userName
         context_dict["email"] = email
@@ -166,7 +165,33 @@ class Profile(View):
         return render(request,"dailydoodle/profile.html",context=context_dict) 
     
     # Also add method for handling profile changes
-
+    @method_decorator(login_required)
+    def post(self,request):
+        print(request.POST)
+        print(request.POST.get("username_change"))
+        print(request.POST.get("name"))
+        name = request.POST.get("name")
+        if(name == "username_change"):
+            return self.handle_username_change(request)
+        elif(name == "password_change"):
+            return self.handle_password_change(request)
+    
+    def handle_username_change(request):
+        requested_change = request.post.get("changed_username")
+        existings = User.objects.filter(username=requested_change)
+        if(len(existings) != 0):
+            return JsonResponse("USERNAME ALREADY TAKEN")
+        else:
+            request.user.username = requested_change
+            request.user.save()
+            return JsonResponse("Changed Username Succesfully")
+        
+    def handle_password_change(request):
+        requested_change = request.post.get("changed_password")
+        request.user.set_password(requested_change)
+        request.user.save()
+        return JsonResponse("Changed Password Succesfully")
+    
 
 # Class view for Draw mode
 class Draw(View):
