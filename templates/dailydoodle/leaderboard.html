@@ -34,9 +34,9 @@ Home
     <div id="leaderboard" class="w-11/12 h-auto mt-4 flex flex-col divide-y divide-extra_blue divide-y-2">
         {% for user,drawing in data %}
             {% if forloop.counter == 1%}
-            <div class="w-full bg-main h-auto px-8 py-4 flex flex-row justify-between rounded-t-lg ">
+            <div class="w-full bg-main h-auto px-8 py-4 flex flex-row justify-between rounded-t-lg board hover:cursor-pointer">
             {% else  %}
-            <div class="w-full bg-main h-auto py-4 px-8 flex flex-row justify-between">
+            <div class="w-full bg-main h-auto py-4 px-8 flex flex-row justify-between board hover:cursor-pointer">
             {% endif %}
                 <h2 class="text-3xl text-secondary_contrast font-bold">{{forloop.counter}}</h2>
                 <div class="flex flex-row p-4 items-center">

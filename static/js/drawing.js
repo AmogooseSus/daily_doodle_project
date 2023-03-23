@@ -3,9 +3,6 @@ $().ready(() => {
     let upvoteText = $("#upvotes-display")[0]
     let drawing_id =  $("#comment").data("drawing_id");
 
-    function renderComments(commentData) {
-
-    }
 
     function handleUpvoteText(amount) {
         $("#upvotes-display").text(amount);
@@ -57,6 +54,13 @@ $().ready(() => {
             upvotes = JSON.parse(response["upvotes"]);
             console.log(upvotes)
             handleUpvoteText(upvotes);
+        })
+    })
+
+    $(".comment").each(function() {
+        $(this).click(function(e) {
+            let username = $(this).find("h1").text()
+            location.href = `/dailydoodle/submissions/${username}`
         })
     })
 })  

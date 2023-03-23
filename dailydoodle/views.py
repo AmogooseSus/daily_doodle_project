@@ -39,7 +39,7 @@ class Index(View):
             user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
             if len(user_drawing) != 0:
                 user_drawing = user_drawing[0]
-                context_dict["user_drawing"] = user_drawing.drawing
+                context_dict["user_drawing"] = user_drawing
             else:
                 context_dict["user_drawing"]  = None
         context_dict["prompt"] = prompt.prompt 
@@ -220,10 +220,14 @@ class DrawingView(View):
         prompt = Prompt.objects.filter(prompt_date=date.today())[0].prompt
         user_drawing = Drawing.objects.get(drawing_id=drawing_id)
         comments = Comment.objects.filter(drawing=drawing_id)
-        print(prompt, user_drawing, comments)
+        context_dict["MEDIA_URL"] = MEDIA_URL
+        context_dict["viewing_user"] = UserProfile.objects.get(user=user_drawing.user)
         context_dict["prompt"] = prompt
-        context_dict["user_drawing"] = user_drawing
-        context_dict["comments"] = comments
+        context_dict["drawing"] = user_drawing
+        comment_profiles = []
+        for comment in comments:
+            comment_profiles.append(UserProfile.objects.get(user=comment.user))
+        context_dict["comments"] = zip(comments,comment_profiles)
         return render(request,"dailydoodle/drawing.html",context=context_dict)
 
     # Also add methods for handling post requests e.g comments ,upvotes etc

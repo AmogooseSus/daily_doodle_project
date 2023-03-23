@@ -20,6 +20,18 @@ $().ready(() => {
             }
         })
     })
+
+    $("#user-submission").click(function() {
+        let drawingID = $("#user-submission").data("drawingid");
+        location.href = `/dailydoodle/drawing/${drawingID}`;
+    })
+
+    $(".top-5").each(function() {
+        $(this).click(function(e) {
+            let drawingID = $(this).attr("id");
+            location.href = `/dailydoodle/drawing/${drawingID}`;
+        })
+    })
     
 
     function switch_drawing() {

@@ -40,7 +40,7 @@ $().ready(function() {
                 $("#search-results").empty()
                 data.forEach(element => {
                     console.log(element)
-                    let boardData = $(`<div class="w-full bg-main h-auto py-4 px-8 flex flex-row justify-evenly">
+                    let boardData = $(`<div class="w-full bg-main h-auto py-4 px-8 flex flex-row justify-evenly hover:cursor-pointer board">
                         <h2>${element.position}</h2>
                         <div class="flex flex-row p-4 items-center">
                             <img class="rounded-lg h-8 w-10" src="${element.profile_picture}" alt="Profile Picture" />
@@ -49,6 +49,9 @@ $().ready(function() {
                         <h2>${element.most_liked_drawing == null ? "None yet" : element.most_liked_drawing}</h2>
                         <h2>${element.upvotes_recieved}</h2>
                     </div>`)
+                    $(boardData).click(function (e) { 
+                        goToUser($(boardData));
+                     })
                     $("#search-results").append(boardData)
                 });
                 toggleLeaderboardAndSearch(true)
@@ -66,6 +69,17 @@ $().ready(function() {
             $("#leaderboard").removeClass("hidden");
             $("#search-results").addClass("hidden");
         }
+    }
+
+    $(".board").each(function() {
+        goToUser($(this));
+    })
+
+    function goToUser(element) {
+        $(element).click(function(e) {
+            let username = $(this).find("h1").text()
+            location.href = `/dailydoodle/submissions/${username}`
+        })
     }
     
 })

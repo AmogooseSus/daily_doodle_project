@@ -12,7 +12,7 @@
         <div class="flex h-full w-full flex-row">
             <div class="w-full h-full overflow-y-auto mt-16 flex flex-col items-center ">
 
-                <div class="flex flex-row w-4/5 justify-center">
+                <div class="flex flex-row w-1/3 justify-center">
                     {% user_snippet user_pic username upvotes %}
                 </div>
 
@@ -20,23 +20,16 @@
                     {% for drawing in drawings %}
                         {% if forloop.counter == 1%} 
                         <div class="flex flex-col items-center dynamic" id="{{ drawing.prompt.prompt }}">
-                            <img id="displayed-image" src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}"
-                                class="rounded-lg shadow-lg w-5/6 aspect-video"/>
-                            <button class="mt-8 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg">
-                                <a class="block" id="details-link" href="{% url 'dailydoodle:drawing' drawing_id=drawing.drawing_id %}">See
-                                    Details</a>
-                            </button>
-                        </div>
                         {% else %}
-                            <div class="flex flex-col items-center hidden dynamic" id="{{ drawing.prompt.prompt }}">
-                                <img id="displayed-image" src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}"
-                                    class="rounded-lg shadow-lg w-5/6 aspect-video"/>
-                                <button class="mt-8 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg">
-                                    <a class="block" id="details-link" href="{% url 'dailydoodle:drawing' drawing_id=drawing.drawing_id %}">See
-                                        Details</a>
-                                </button>
-                            </div>
+                        <div class="flex flex-col items-center hidden dynamic" id="{{ drawing.prompt.prompt }}">
                         {% endif %}
+                        <img id="displayed-image" src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}"
+                        class="rounded-lg shadow-lg w-5/6 aspect-video"/>
+                        <button class="mt-8 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg">
+                        <a class="block" id="details-link" href="{% url 'dailydoodle:drawing' drawing_id=drawing.drawing_id %}">See
+                            Details</a>
+                        </button>
+                        </div>
                     {% endfor %} 
                 </div>
 
@@ -45,47 +38,6 @@
     {% prompt_timeline all_prompts %}
     </div>
 </main>
-    {% comment %} <div class="flex flex-row w-full justify-left mb-8 mt-8">
-        {% user_snippet user_pic username upvotes %}
-    </div>
-    <div>
-  <p>Upvotes: <span id="upvotes-count">{{ drawings.0.total_upvotes }}</span></p>
-</div>
-
-    <!--make a list of the other drawings the user has done -->
-    <div class="flex flex-row justify-end">
-        <div class="w-1/4">
-            <div style="max-height: 600px; overflow-y: auto; position: absolute; z-index: 1; border-left: 10px solid #0b1228; padding: 10px; height: 100%;">
-                {% for x in drawings|slice:":5" %}
-                    <p style="font-size: 16px; ">
-                        {{ x.prompt.prompt_date|date:"d/m/y" }} <br>
-                        <a class="block" href="#"
-                           onclick="updateDisplayedImage('{{ x.drawing.url }}', '{{ x.drawing_id }}', {{ x.total_upvotes }})"
-                           style="font-weight: bold; font-size: 21px"
-                           data-upvotes="{{ x.total_upvotes }}"
-                           onmouseover="this.style.backgroundColor='rgba(221,221,221,0.2)';"
-                           onmouseout="this.style.backgroundColor='transparent';">{{ x.drawing_id|cut:username|cut:"-"|capfirst}}</a>
-                        <br><br>
-                    </p>
-                {% endfor %}
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Only show most recent image -->
-    {% for drawing in drawings|slice:":1" %}
-        <div class="relative">
-            <img id="displayed-image" src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}"
-                 class="rounded-lg shadow-lg"/>
-            <button class="absolute bottom-0 left-1/4 transform -translate-x-1/2 translate-y-1/2 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg">
-                <a class="block" id="details-link" href="{% url 'dailydoodle:drawing' drawing_id=drawing.drawing_id %}">See
-                    Details</a>
-            </button>
-        </div>
-        {% empty %}
-        <p>No pictures yet.</p>
-    {% endfor %} {% endcomment %}
 {% endblock %}
 
 {% block script_block %}

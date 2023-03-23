@@ -19,11 +19,13 @@ Homepage
             <button class="mt-8 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg"><a class="block" href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
         {% endif %}
         </div>
-    <div class="flex  flex-col justify-start items-start mr-20">
+    <div class="w-5/12">
+    <div class="flex  flex-col justify-start items-start mr-20  hover:cursor-pointer" id="user-submission" data-drawingid="{{user_drawing.drawing_id}}" >
         {% if user_drawing %}
             <h4 class="text-xs self-start">Your Submission</h4>
-            <img src={{MEDIA_URL}}{{user_drawing}} class="aspect-video w-full rounded-lg shadow-lg" />
+            <img src={{MEDIA_URL}}{{user_drawing.drawing}} class="aspect-video w-full rounded-lg shadow-lg" />
         {% endif %}
+    </div>
     </div>
 </div>
 
@@ -35,24 +37,26 @@ Homepage
                 <div class="flex flex-row w-full justify-center">
                 {% for k in top_drawings.top %}
                 {% if forloop.first%}
-                 <div class="clickable h-4 w-4 bg-white hover:bg-white rounded-lg mx-1 shadow-lg" data-drawing="{{k.drawing_id}}" id="intial"></div>
+                 <div class="clickable h-4 w-4 bg-white hover:bg-white rounded-lg mx-1 shadow-lg hover:cursor-pointer" data-drawing="{{k.drawing_id}}" id="intial"></div>
                 {% else %}
-                    <div class="clickable h-4 w-4 bg-indigo-100 hover:bg-white rounded-lg mx-1 shadow-lg opacity-50" data-drawing="{{k.drawing_id}}"></div>
+                    <div class="clickable h-4 w-4 bg-indigo-100 hover:bg-white rounded-lg mx-1 shadow-lg opacity-50 hover:cursor-pointer" data-drawing="{{k.drawing_id}}"></div>
                 {% endif %}
                 {% endfor %}
                 </div>
             </div>
         {% for k in top_drawings.top%}
             {% if forloop.first %}
-            <div id="{{k.drawing_id}}" >
+            <div id="{{k.drawing_id}}"class="top-5" >
             {% else %}
-            <div id="{{k.drawing_id}}" class="hidden">
+            <div id="{{k.drawing_id}}" class="hidden top-5">
             {% endif %}
-            <img src={{MEDIA_URL}}{{k.drawing}} class="aspect-video w-4/5 rounded-lg shadow-lg" />
+            <img src={{MEDIA_URL}}{{k.drawing}} class="aspect-video w-4/5 rounded-lg shadow-lg hover:cursor-pointer " />
             <div class="h-8"> </div>
             <div class="absolute w-4/5 bottom-0 mt-20 ">
                 <div class="flex flex-row w-full justify-center">
+                <div class="flex flex-row w-1/2 justify-center">
                 {% user_snippet k.user_profile_picture k.username k.total_upvotes%}
+                </div>
                 </div>
             </div>
             </div>
@@ -66,4 +70,6 @@ Homepage
 
 {% block script_block %}
 <script src="{% static "js/index.js" %}"></script>
+<script src="{% static "js/user_snippet.js" %}">
+</script>
 {% endblock %}
