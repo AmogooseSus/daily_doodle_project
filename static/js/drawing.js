@@ -26,7 +26,7 @@ $().ready(() => {
     // Create a post request to save the comment for this drawing we then re render the comments so user doesn't have to refresh
     $("#submit").click((e) => {
         let comment_text = $("#comment")[0].value;
-        if(comment_text.length < 0 ) return;
+        if(comment_text ==  "" || comment_text.length <= 0 ) return;
         $.ajax({
             type: "POST",
             url: `/dailydoodle/drawing/${drawing_id}`,
