@@ -168,17 +168,21 @@ class Profile(View):
     @method_decorator(login_required)
     def post(self,request):
         print(request.POST)
-        print(request.POST.get("username_change"))
-        print(request.POST.get("name"))
-        name = request.POST.get("name")
-        if(name == "username_change"):
+        print("new username: ",request.POST.get("username_change"))
+        print("new password: ",request.POST.get("password_change"))
+        name = request.POST.get("username_change")
+        password = request.POST.get("password_change")
+        if(name != None):
+            print("Handle username change")
             return self.handle_username_change(request)
-        elif(name == "password_change"):
+        elif(password != None):
+            print("handle password change")
             return self.handle_password_change(request)
     
-    def handle_username_change(request):
-        requested_change = request.post.get("changed_username")
+    def handle_username_change(self,request):
+        requested_change = request.POST.get("changed_username")
         existings = User.objects.filter(username=requested_change)
+        print("Checking if username is taken")
         if(len(existings) != 0):
             return JsonResponse("USERNAME ALREADY TAKEN")
         else:
@@ -186,7 +190,7 @@ class Profile(View):
             request.user.save()
             return JsonResponse("Changed Username Succesfully")
         
-    def handle_password_change(request):
+    def handle_password_change(self,request):
         requested_change = request.post.get("changed_password")
         request.user.set_password(requested_change)
         request.user.save()
