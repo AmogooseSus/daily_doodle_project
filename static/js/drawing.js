@@ -1,6 +1,4 @@
 $().ready(() => {
-
-    let upvoteText = $("#upvotes-display")[0]
     let drawing_id =  $("#comment").data("drawing_id");
 
 
@@ -28,6 +26,7 @@ $().ready(() => {
     // Create a post request to save the comment for this drawing we then re render the comments so user doesn't have to refresh
     $("#submit").click((e) => {
         let comment_text = $("#comment")[0].value;
+        if(comment_text.length < 0 ) return;
         $.ajax({
             type: "POST",
             url: `/dailydoodle/drawing/${drawing_id}`,
@@ -38,7 +37,21 @@ $().ready(() => {
             },
         }).done((e) => {
             console.log("saved comment");
-            renderComments();
+            // show comment locally
+            let username = $("#submit").data("username");
+            let profile_picture = $("#submit").data("profilepicture");
+            let date =  new Date();
+            let formatted_date = date.toLocaleString();
+            $("#comments").prepend(` <div class="flex flex-col w-full bg-main h-auto px-8 py-4  ">
+            <h4 class="text-main_gray text-xs">${formatted_date}</h4> 
+            <div class="flex flex-row  divide-x-2 divide-extra_blue">
+            <div class="flex flex-row p-4 items-center comment hover:cursor-pointer self-start">
+                <img class="rounded-lg h-14 w-16" src="${profile_picture}" alt="Profile Picture" />  
+                <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold">${username}</h1>
+            </div>
+            <h2 class="px-8 break-all w-fit">${comment_text}</h2>
+            </div>
+            </div> `);
         })
     })
 

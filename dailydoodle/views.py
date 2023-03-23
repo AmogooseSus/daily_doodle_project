@@ -219,11 +219,12 @@ class DrawingView(View):
         context_dict = {}
         prompt = Prompt.objects.filter(prompt_date=date.today())[0].prompt
         user_drawing = Drawing.objects.get(drawing_id=drawing_id)
-        comments = Comment.objects.filter(drawing=drawing_id)
+        comments = Comment.objects.filter(drawing=drawing_id).order_by("-date")
         context_dict["MEDIA_URL"] = MEDIA_URL
         context_dict["viewing_user"] = UserProfile.objects.get(user=user_drawing.user)
         context_dict["prompt"] = prompt
         context_dict["drawing"] = user_drawing
+        context_dict["current_user"] = UserProfile.objects.get(user=request.user)
         comment_profiles = []
         for comment in comments:
             comment_profiles.append(UserProfile.objects.get(user=comment.user))

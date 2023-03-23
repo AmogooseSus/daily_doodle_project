@@ -28,24 +28,30 @@ Home
 </div>
     
 
-<div>
-    <label for="comment">Comment:</label>
-    <input type="text" id="comment" name="comment" min-length="300" data-drawing_id="{{drawing.drawing_id}}">
-    <button id="submit">Submit Comment</button>
+
+ <div class="flex flex-row w-11/12 h-auto mt-4 bg-main rounded-t-lg p-8">
+    <div class="flex flex-row p-4 items-center comment hover:cursor-pointer self-start">
+        <img class="rounded-lg h-14 w-16" src="{{ MEDIA_URL}}{{current_user.profile_picture}}" alt="Profile Picture" />  
+        <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold">{{ current_user.user.username }}</h1>
+    </div>
+    <div class="flex flex-col w-10/12 ">
+        <label for="comment" class="text-s text-main_gray">Comment:</label>
+        <textarea rows="3" class="bg-main padding-2 border-2 rounded-lg border-main_gray" type="text" id="comment" name="comment" maxlength="300" data-drawing_id="{{drawing.drawing_id}}"> </textarea>
+        <button class="p-2 bg-secondary_contrast rounded-lg w-1/4  self-center mt-4" id="submit" data-username="{{current_user.user.username}}" data-profilepicture="{{MEDIA_URL}}{{current_user.profile_picture}}">Submit Comment</button>
+    </div>    
 </div>
 
-<div id="comments" class="w-11/12 h-auto mt-4 flex flex-col divide-y divide-extra_blue divide-y-2">
+<div id="comments" class="w-11/12 h-auto flex flex-col divide-y divide-extra_blue divide-y-2">
     {% for comment,profile in comments %}
-        {% if forloop.counter == 1%}
-        <div class="w-full bg-main h-auto px-8 py-4 flex flex-row  rounded-t-lg divide-x-2 divide-extra_blue">
-        {% else  %}
-        <div class="w-full bg-main h-auto py-4 px-8 flex flex-row  divide-x-2 divide-extra_blue">
-        {% endif %}
+        <div class="flex flex-col w-full bg-main h-auto px-8 py-4">
+        <h4 class="text-main_gray text-xs">{{comment.date|date:"SHORT_DATETIME_FORMAT" }}</h4> 
+        <div class="flex flex-row  divide-x-2 divide-extra_blue">
         <div class="flex flex-row p-4 items-center comment hover:cursor-pointer self-start">
-            <img class="rounded-lg h-14 w-16" src="{{ MEDIA_URL}}{{profile.profile_picture}}" alt="Profile Picture" />
+            <img class="rounded-lg h-14 w-16" src="{{ MEDIA_URL}}{{profile.profile_picture}}" alt="Profile Picture" />  
             <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold">{{ comment.user.username }}</h1>
         </div>
         <h2 class="px-8 break-all w-fit">{{comment.comment}}</h2>
+        </div>
         </div>
     {% endfor %}
 </div>
