@@ -180,15 +180,18 @@ class Profile(View):
             return self.handle_password_change(request)
     
     def handle_username_change(self,request):
-        requested_change = request.POST.get("changed_username")
+        requested_change = request.POST.get("username_change")
         existings = User.objects.filter(username=requested_change)
         print("Checking if username is taken")
         if(len(existings) != 0):
             return JsonResponse("USERNAME ALREADY TAKEN")
         else:
+            print("Username is good to go")
             request.user.username = requested_change
+            print("changed up. Request chang: ",requested_change)
             request.user.save()
-            return JsonResponse("Changed Username Succesfully")
+            print("Saved")
+            return JsonResponse("Changed Username Succesfully",safe=False)
         
     def handle_password_change(self,request):
         requested_change = request.post.get("changed_password")
