@@ -58,13 +58,14 @@ class Collections(View):
         drawings = self.get_latest_drawings(prompts)
         context_dict["prompts"] = prompts
         context_dict["prompt_drawings"]  = drawings
-        print(drawings)
+        context_dict["MEDIA_URL"] = MEDIA_URL
+        
         return render(request, "dailydoodle/collections.html", context=context_dict) 
     
     def get_latest_drawings(self,prompts):
         drawings = {}
         for prompt in prompts:
-            prompt_drawings = Drawing.objects.filter(prompt=prompt).values()
+            prompt_drawings = Drawing.objects.filter(prompt=prompt)
             drawings[prompt.prompt] = prompt_drawings
         return drawings
     

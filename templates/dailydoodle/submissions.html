@@ -16,7 +16,7 @@
                     {% user_snippet user_pic username upvotes %}
                 </div>
 
-                <div id="dynamic-content" class="mt-8">
+                <div  class="mt-8">
                     {% for drawing in drawings %}
                         {% if forloop.counter == 1%} 
                         <div class="flex flex-col items-center dynamic" id="{{ drawing.prompt.prompt }}">

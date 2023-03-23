@@ -1,20 +1,38 @@
-<nav class="flex  lg:flex-col flex-row lg:w-1/6 sm:w-full overflow-y-auto ">
 
+<nav class="flex w-1/6 h-fill flex-col items-start overflow-y-auto ">
 
-<div class="w-2 h-fill bg-black ">
-    {% for prompt in prompts %}
-        <div class="flex flex-row mt-16 ml-4 items-center">
-         <div>
-         <h2 class="text-s text-main_gray">{{ prompt.prompt_date|date:"d/m/y" }}</h2>
+<div class="flex flex-col self-start w-5/5 p-4 mt-4">
+    <h6 class="text-xs">Search Prompt</h6>
+    <div class="flex flex-row bg-main p-2 rounded-full">
+    <input type="text" name="search" id="search-bar" class="bg-main w-full" />
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path opacity="0.4" d="M11.6665 4.16666H16.6665" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path opacity="0.4" d="M11.6665 6.66666H14.1665" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17.4998 9.58332C17.4998 13.9583 13.9582 17.5 9.58317 17.5C5.20817 17.5 1.6665 13.9583 1.6665 9.58332C1.6665 5.20832 5.20817 1.66666 9.58317 1.66666" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path opacity="0.4" d="M18.3332 18.3333L16.6665 16.6667" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>            
+    </div>
+</div>
 
-         <div class="flex flex-row items-center" >
-            <div class="h-4 w-4 rounded-full mr-2 bg-secondary_contrast"></div>
-            <h1 class="hover:text-secondary_contrast hover:cursor-pointer text-xl font-medium dynamic-change" data-prompt="{{prompt.prompt}}">{{ prompt.prompt }}</h1>
-         </div>
+<div class="flex flex-row mt-2">
 
-         </div>
+<div class="w-2 h-fill bg-main "> </div>    
+<div class="flex flex-col items-start">
+{% for prompt in prompts %}
+<div class="flex flex-col ml-4 items-center mt-16 prompt-div">
+    <div>
+        <h2 class="text-s text-main_gray">{{ prompt.prompt_date|date:"d/m/y" }}</h2>
+
+        <div class="flex flex-row items-center" >
+        <div class="h-4 w-4 rounded-full mr-2 bg-secondary_contrast"></div>
+        <h1 class="hover:text-secondary_contrast hover:cursor-pointer text-xl font-medium dynamic-change" data-prompt="{{prompt.prompt}}">{{ prompt.prompt }}</h1>
         </div>
-    {% endfor %}
+
+    </div>
+</div>
+{% endfor %}
+</div>
+
 </div>
 
 </nav>
