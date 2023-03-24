@@ -32,7 +32,7 @@ def get_random_profile_picture(username):
         with open(f"{MEDIA_ROOT}/profile_images/{username}.jpg","wb") as out_file:
                 to_copy = open(f"{MEDIA_ROOT}/profile_images/cat.png","rb")
                 shutil.copyfileobj(to_copy,out_file)
-        print("Error:", response.status_code, response.text)
+        print("Random Image API Error:", response.status_code, response.text)
         return f"/profile_images/{username}.jpg"
     
 # helper function used to query unsplash api for pictures for a certain search query

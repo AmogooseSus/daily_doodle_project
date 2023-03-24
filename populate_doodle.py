@@ -43,9 +43,12 @@ def create_users():
             new_user = User(username=user,email=f"{user}@{user}.com")
             new_user.set_password(password)
             new_user.save()
-            UserProfile.objects.create(user=new_user,profile_picture=get_random_profile_picture(new_user.username))
-        except:
-            pass
+        except Exception :
+            print(Exception)
+    print("Creating associated user profiles")
+    for user in User.objects.all():
+        picture =  get_random_profile_picture(user.username) 
+        UserProfile.objects.create(user=user,profile_picture=picture)
     print("Created all users successfully")
 
 
