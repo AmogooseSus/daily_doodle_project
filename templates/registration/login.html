@@ -1,21 +1,33 @@
 {% extends 'dailydoodle/base.html' %}
+{% load daily_doodle_tags %}
 {% block title_block %}
     Login
 {% endblock %}
 
 {% block body_block %}
-<h1>Login</h1>
-
-<form method="post" action=".">
+<section class="flex flex-col items-center justify-center h-full">
+<h1 class="text-6xl font-bold mb-8 text-white ">Login</h1>
+<div class="h-1/2 w-1/4 bg-main p-6 rounded-lg ">
+<form method="post" action="." class="flex flex-col justify-evenly h-full items-center">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Log In" />
-    <input type="hidden" name="next" value="{{next}}" />
+    <div class="flex flex-col h-3/4 self-start  w-full">
+        <div class="">
+        <h3 class="text-xs">Username</h3>
+        <input type="text" name="username" autofocus="" required="" id="id_username" class="w-full rounded-lg bg-extra_blue p-1">
+        </div>
+
+        <div class="mt-16">
+        <h3 class="text-xs">Password</h3>
+        <input type="password" name="password" required="" id="id_password" class="w-full rounded-lg bg-extra_blue p-1">
+        </div>
+    </div>
+
+    <input type="submit" value="Log In" class="bg-secondary_contrast rounded-lg py-2 px-4 w-3/4 text-white hover:cursor-pointer">
+    <input type="hidden" name="next" value="">
+    {% for field,value in form.errors.items %}
+    {{ value }}
+    {% endfor %}
 </form>
-
-<p>
-    Not registered?
-    <a href="{% url 'registration_register' %}">Register here!</a>
-</p>
-
+</div>
+</section>
 {% endblock %}

@@ -6,19 +6,18 @@
 # using a mutex
 
 
-from db_mutex import DBMutexError,DBMutexTimeoutError
-from db_mutex.db_mutex import db_mutex
 from dailydoodle.apis import get_random_prompt
 from dailydoodle.models import Prompt
 from datetime import date
+from django.db import transaction
+
 
 class PromptMiddleware:
 
     def __init__(self,get_response):
         self.get_response = get_response
 
-    def __call__(self,request):
-        
+    def __call__(self,request):   
         response = self.get_response(request)
         return response
     
@@ -30,12 +29,11 @@ class PromptMiddleware:
         next_prompt = get_random_prompt()
         while(len(Prompt.objects.filter(prompt=next_prompt)) != 0 and next_prompt != None):
             next_prompt = get_random_prompt()
-        p = Prompt.objects.create(prompt=next_prompt,prompt_date=date.today())
-        # try:
-        #     with db_mutex("lock_id"):
-                
-        # except DBMutexError:
-        #     print("Could not get the lock")
-        # except DBMutexTimeoutError:
-        #     print("Process finished but lock timed out")
+        # lock this critical section so no 2 users can activate this middleware at the same time and hence generating a new prompt
+        print(next_prompt)
+        with transaction.atomic():
+            Prompt.objects.create(prompt=next_prompt,prompt_date=date.today())
+
+
+       
 

@@ -1,8 +1,36 @@
 {% extends "dailydoodle/base.html" %}
+{% load daily_doodle_tags %}
+{% load staticfiles %}
+
 {% block title_block %}
-Home
+Collections
 {% endblock %}
 
 {% block body_block %}
-Content for collections
+<main class="flex flex-col h-screen ">
+  <div class="flex flex-1 overflow-hidden">
+      <div class="flex h-full w-full flex-row overflow-y-auto">
+          <div class="w-full h-full  mt-16 flex flex-col items-center ">
+            {% for prompt_drawing,value in prompt_drawings.items %}
+              {% if forloop.counter == 1%}
+              <div id="{{ prompt_drawing }}" class="dynamic grid lg:grid-cols-2 grid-cols-1  gap-4"> 
+              {% else %}
+              <div id="{{ prompt_drawing }}" class="dynamic hidden grid lg:grid-cols-2 grid-cols-1 gap-4">
+              {% endif %}
+                      {% for drawing in value %}
+                            <img id="{{ drawing.drawing_id}}"src="{{MEDIA_URL}}{{ drawing.drawing }}" alt="{{ drawing.title }}"
+                                class="rounded-lg shadow-lg w-5/6 aspect-video displayed-image hover:cursor-pointer hover:opacity-90"/>
+                      {% endfor %}
+              </div>
+              {% endfor %} 
+          </div>
+        </div>
+  {% prompt_timeline prompts %}
+  </div>
+</main>
+{% endblock %}
+
+{% block script_block %}
+  <script src="{% static "js/submissions.js" %}">
+  </script>
 {% endblock %}

@@ -1,8 +1,69 @@
 {% extends "dailydoodle/base.html" %}
+{% load staticfiles %}
+{% load daily_doodle_tags %}
 {% block title_block %}
 Home
 {% endblock %}
 
 {% block body_block %}
-Content for drawing 
+{% csrf_token %} 
+<section class="flex flex-col mt-8 items-center">
+<div class="self-center lg:w-1/3 w-full">
+{% user_snippet  viewing_user.profile_picture viewing_user.user.username viewing_user.upvotes_recieved%}
+</div>
+
+<h1 class="text-6xl text-white font-bold my-4">{{prompt}}</h1>
+
+<img id="displayed-image" src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}"
+                        class="rounded-lg shadow-lg w-1/2 aspect-video"/>
+
+
+<div class="flex flex-row items-center mt-4">
+    <h1 id="upvotes-display" class="text-3xl text-white font-medium">{{drawing.total_upvotes}}</h1>
+    <button id="upvote" name="upvote" class="ml-4">
+    <svg class="h-8" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15.5 30.0833C13.5848 30.0833 11.6885 29.7061 9.91916 28.9732C8.14983 28.2404 6.54217 27.1661 5.18799 25.812C2.45308 23.0771 0.916626 19.3677 0.916626 15.5C0.916626 11.6322 2.45308 7.92292 5.18799 5.18802C7.92289 2.45311 11.6322 0.916656 15.5 0.916656C17.4151 0.916656 19.3114 1.29387 21.0808 2.02675C22.8501 2.75963 24.4577 3.83383 25.8119 5.18802C27.1661 6.5422 28.2403 8.14986 28.9732 9.91919C29.7061 11.6885 30.0833 13.5849 30.0833 15.5C30.0833 19.3677 28.5468 23.0771 25.8119 25.812C23.077 28.5469 19.3677 30.0833 15.5 30.0833ZM15.5 8.20832L8.20829 15.5H12.5833V21.3333H18.4166V15.5H22.7916L15.5 8.20832Z" fill="#D84E60"/>
+    </svg>
+    </button>
+</div>
+    
+
+
+ <div class="flex flex-row w-11/12 h-auto mt-4 bg-main rounded-t-lg p-8">
+    <div class="flex flex-row p-4 items-center comment hover:cursor-pointer self-start">
+        <img class="rounded-lg h-14 w-16" src="{{ MEDIA_URL}}{{current_user.profile_picture}}" alt="Profile Picture" />  
+        <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold">{{ current_user.user.username }}</h1>
+    </div>
+    <div class="flex flex-col w-10/12 ">
+        <label for="comment" class="text-s text-main_gray">Comment:</label>
+        <textarea rows="3" class="bg-main padding-2 border-2 rounded-lg border-main_gray" type="text" id="comment" name="comment" maxlength="300" data-drawing_id="{{drawing.drawing_id}}"></textarea>
+        <button class="p-2 bg-secondary_contrast rounded-lg w-1/4  self-center mt-4" id="submit" data-username="{{current_user.user.username}}" data-profilepicture="{{MEDIA_URL}}{{current_user.profile_picture}}">Submit Comment</button>
+    </div>    
+</div>
+
+<div id="comments" class="w-11/12 h-auto flex flex-col divide-y divide-extra_blue divide-y-2">
+    {% for comment,profile in comments %}
+        <div class="flex flex-col w-full bg-main h-auto px-8 py-4">
+        <h4 class="text-main_gray text-xs">{{comment.date|date:"SHORT_DATETIME_FORMAT" }}</h4> 
+        <div class="flex flex-row  divide-x-2 divide-extra_blue">
+        <div class="flex flex-row p-4 items-center comment hover:cursor-pointer self-start">
+            <img class="rounded-lg h-14 w-16" src="{{ MEDIA_URL}}{{profile.profile_picture}}" alt="Profile Picture" />  
+            <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold">{{ comment.user.username }}</h1>
+        </div>
+        <h2 class="px-8 break-all w-fit">{{comment.comment}}</h2>
+        </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+
+</section>
+{% endblock %}
+
+{% block script_block %}
+<script src="{% static "js/drawing.js" %}"></script>
+<script src="{% static "js/user_snippet.js" %}">
+</script>
 {% endblock %}

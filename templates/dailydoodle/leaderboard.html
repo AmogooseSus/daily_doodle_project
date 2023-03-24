@@ -1,8 +1,58 @@
 {% extends "dailydoodle/base.html" %}
+{% load staticfiles %}
 {% block title_block %}
 Home
 {% endblock %}
 
 {% block body_block %}
-Content for leaderboard
+<section class="flex flex-col mt-8 gap-4">
+    <h1 class="text-5xl text-white font-bold" id="top-title">Top {{amount}} users</h1>
+    <div class="flex flex-col self-end mr-64">
+        <h6 class="text-xs self-start">Search Users</h6>
+        <div class="flex flex-row bg-main p-2 rounded-full">
+        <input type="text" name="search" id="search-bar" class="bg-main" />
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path opacity="0.4" d="M11.6665 4.16666H16.6665" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path opacity="0.4" d="M11.6665 6.66666H14.1665" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17.4998 9.58332C17.4998 13.9583 13.9582 17.5 9.58317 17.5C5.20817 17.5 1.6665 13.9583 1.6665 9.58332C1.6665 5.20832 5.20817 1.66666 9.58317 1.66666" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path opacity="0.4" d="M18.3332 18.3333L16.6665 16.6667" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>            
+        </div>
+    </div>
+
+    <div id="leaderboard-text" class=" w-11/12 flex flex-row justify-between px-8">
+        <h3>Position</h3>
+        <h3>Username</h3>
+        <h3>Most upvoted Prompt</h3>
+        <h3>Total Upvotes</h3>
+    </div>
+
+    <div id="search-results" class="w-11/12 h-auto mt-4 flex flex-col divide-y divide-extra_blue divid-y-2 hidden">
+
+    </div>
+
+    <div id="leaderboard" class="w-11/12 h-auto mt-4 flex flex-col divide-y divide-extra_blue divide-y-2">
+        {% for user,drawing in data %}
+            {% if forloop.counter == 1%}
+            <div class="w-full bg-main h-auto px-8 py-4 flex flex-row justify-between rounded-t-lg board hover:cursor-pointer">
+            {% else  %}
+            <div class="w-full bg-main h-auto py-4 px-8 flex flex-row justify-between board hover:cursor-pointer">
+            {% endif %}
+                <h2 class="text-3xl text-secondary_contrast font-bold">{{forloop.counter}}</h2>
+                <div class="flex flex-row p-4 items-center">
+                    <img class="rounded-lg h-8 w-10" src="{{ MEDIA_URL}}{{user.profile_picture}}" alt="Profile Picture" />
+                    <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold">{{ user.user.username }}</h1>
+                </div>
+                <h2>{{drawing.prompt}}</h2>
+                <h2>{{user.upvotes_recieved}}</h2>
+            </div>
+        {% endfor %}
+    </div>
+
+</section>
+{% endblock %}
+
+{% block script_block %} 
+    <script src="{% static "js/leaderboard.js" %}">
+    </script>
 {% endblock %}

@@ -12,6 +12,5 @@ urlpatterns = [
     path("profile/",views.Profile.as_view(),name="profile"),
     path("leaderboard/",views.LeaderBoard.as_view(),name="leaderboard"),
     path("draw/",views.Draw.as_view(),name="draw"),
-    path("drawing/",views.DrawingView.as_view(),name="drawing"),
-    #add view for handling deletion of account
+    path("drawing/<drawing_id>",views.DrawingView.as_view(),name="drawing"),
 ]

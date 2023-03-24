@@ -1,8 +1,46 @@
 {% extends "dailydoodle/base.html" %}
+{% load staticfiles %}
+{% load daily_doodle_tags %}
+
 {% block title_block %}
-Home
+    Submissions
 {% endblock %}
 
 {% block body_block %}
-Content for submissions
+<main class="flex flex-col h-screen ">
+    <div class="flex flex-1 overflow-hidden">
+        <div class="flex h-full w-full flex-row">
+            <div class="w-full h-full overflow-y-auto mt-16 flex flex-col items-center ">
+
+                <div class="flex flex-row w-1/3 justify-center">
+                    {% user_snippet user_pic username upvotes %}
+                </div>
+
+                <div  class="mt-8">
+                    {% for drawing in drawings %}
+                        {% if forloop.counter == 1%} 
+                        <div class="flex flex-col items-center dynamic" id="{{ drawing.prompt.prompt }}">
+                        {% else %}
+                        <div class="flex flex-col items-center hidden dynamic" id="{{ drawing.prompt.prompt }}">
+                        {% endif %}
+                        <img id="displayed-image" src="{{ drawing.drawing.url }}" alt="{{ drawing.title }}"
+                        class="rounded-lg shadow-lg w-5/6 aspect-video"/>
+                        <button class="mt-8 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg">
+                        <a class="block" id="details-link" href="{% url 'dailydoodle:drawing' drawing_id=drawing.drawing_id %}">See
+                            Details</a>
+                        </button>
+                        </div>
+                    {% endfor %} 
+                </div>
+
+            </div>
+          </div>
+    {% prompt_timeline all_prompts %}
+    </div>
+</main>
+{% endblock %}
+
+{% block script_block %}
+    <script src="{% static "js/submissions.js" %}">
+    </script>
 {% endblock %}
