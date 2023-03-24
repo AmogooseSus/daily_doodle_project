@@ -28,17 +28,31 @@
                  slider: "#454ADE",
               },
             },
+            screens: {
+              '2xl': {'max': '1535px'},
+  
+              'xl': {'max': '1279px'},
+              
+
+              'lg': {'max': '1023px'},
+
+              'md': {'max': '767px'},
+            
+              'sm': {'max': '639px'},
+
+              "mobile": {"max": "500px"},
+            }
           }
         }
       </script>
 </head>
 <body class="bg-extra_blue bg-[url('{% static "/icons/random-shapes.svg" %}')] bg-scroll bg-fixed text-main_gray">
-  <main class="flex flex-col h-screen">
-    <div class="flex flex-1 overflow-hidden">
+  <main class="flex flex-col h-screen  ">
+    <div class="flex flex-1 overflow-hidden sm:flex-col sm:flex-none">
     {% get_nav current_link user %}
 
       <div class="flex h-full w-full flex-row">
-        <div id="main" class="w-full h-full  overflow-y-auto ml-20">
+        <div id="main" class="w-full h-full  overflow-y-auto ml-20 md:ml-0 md:p-2 ">
         {% block body_block %}
         {% endblock %}
         </div>

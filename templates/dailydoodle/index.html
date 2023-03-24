@@ -10,16 +10,16 @@ Homepage
 {% endblock %}
 
 {% block body_block %}
-<section class="flex flex-col  mt-8">
-<div class="flex flex-row justify-between gap-x-56">
+<section class="flex flex-col  mt-8 ">
+<div class="flex flex-row md:flex-col  justify-between gap-x-56 md:gap-x-2">
     <div class="flex flex-col">
-        <h4 class="text-xs">Todays Prompt</h4>
-        <h1 class="font-extrabold text-6xl text-white">{{ prompt }}</h1>
+        <h4 class="text-xs ">Todays Prompt</h4>
+        <h1 class="font-extrabold text-6xl text-white md:text-5xl">{{ prompt }}</h1>
         {% if not user_drawing %}
             <button class="mt-8 bg-secondary_contrast px-4 py-1 rounded-lg font-medium text-secondary_gray shadow-lg"><a class="block" href="{% url 'dailydoodle:draw' %}">Draw Now!</a></button>
         {% endif %}
         </div>
-    <div class="w-5/12">
+    <div class="w-5/12 md:w-full md:mt-8">
     <div class="flex  flex-col justify-start items-start mr-20  hover:cursor-pointer" id="user-submission" data-drawingid="{{user_drawing.drawing_id}}" >
         {% if user_drawing %}
             <h4 class="text-xs self-start">Your Submission</h4>
@@ -29,7 +29,7 @@ Homepage
     </div>
 </div>
 
-<div class="flex flex-col mx-32 my-32">
+<div class="flex flex-col mx-32 my-32 md:m-0 md:mt-16">
     {% if top_drawings.amount > 0 %}
     <h4 class="text-xs">Todays Top {{top_drawings.amount}}</h4>
     <div class="relative mt-4 min-h-fit max-h-screen">
@@ -54,7 +54,7 @@ Homepage
             <div class="h-8"> </div>
             <div class="absolute w-4/5 bottom-0 mt-20 ">
                 <div class="flex flex-row w-full justify-center">
-                <div class="flex flex-row w-1/2 justify-center">
+                <div class="flex flex-row w-1/2 justify-center md:w-5/6 md:h-16 ">
                 {% user_snippet k.user_profile_picture k.username k.total_upvotes%}
                 </div>
                 </div>
