@@ -35,10 +35,11 @@ $().ready(() => {
     let references = []
     let max_amount = 3;
 
-    $("#canvas")
+    ctx.canvas.style.touchAction = "none";
 
     
     $("#canvas").bind( "mousedown pointerdown",(e) => {
+        $("#canvas").focus();
         mouseDown = true;
         ctx.beginPath();
         // reset redoStack if new line started on clear canvas
@@ -53,9 +54,13 @@ $().ready(() => {
         undoStack.push(ctx.getImageData(0,0,canvas.width,canvas.height));
         undoTop++;
     })
+
+    $("#canvas").bind("mouseout pointerout",(e) => {
+        mouseDown = false;
+        ctx.beginPath();
+    })
     $("#canvas").on("pointermove",handle_drawing)
     $("#canvas").mousemove(handle_drawing);
-
 
     function handle_drawing(e) {
         if(!mouseDown) return;
@@ -67,6 +72,7 @@ $().ready(() => {
             ctx.lineWidth = eraserWidth;
             ctx.strokeStyle = canvasColour;
         }  
+        console.log(e.offsetX,e.offsetY)
         drawLine(e.offsetX,e.offsetY);
     }
 
