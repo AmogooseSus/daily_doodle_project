@@ -46,8 +46,8 @@ $().ready(() => {
             <h4 class="text-main_gray text-xs">${formatted_date}</h4> 
             <div class="flex flex-row  divide-x-2 divide-extra_blue">
             <div class="flex flex-row p-4 items-center comment hover:cursor-pointer self-start">
-                <img class="rounded-lg h-14 w-16" src="${profile_picture}" alt="Profile Picture" />  
-                <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold">${username}</h1>
+                <img class="rounded-lg h-14 w-16  md:h-8 md:w-10 " src="${profile_picture}" alt="Profile Picture" />  
+                <h1 class="ml-2 break-all text-secondary_gray text-center font-semibold md:text-xs">${username}</h1>
             </div>
             <h2 class="px-8 break-all w-fit">${comment_text}</h2>
             </div>

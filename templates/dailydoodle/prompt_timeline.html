@@ -1,5 +1,5 @@
 
-<nav class="flex w-1/6 h-fill flex-col items-start overflow-y-auto ">
+<nav class="flex w-1/6 md:w-full  h-fill flex-col items-start overflow-y-auto md:overflow-y-visible  ">
 
 <div class="flex flex-col self-start w-5/5 p-4 mt-4">
     <h6 class="text-xs">Search Prompt</h6>
@@ -17,7 +17,7 @@
 <div class="flex flex-row mt-2">
 
 <div class="w-2 h-fill bg-main "> </div>    
-<div class="flex flex-col items-start">
+<div class="flex flex-col md:flex-row items-start">
 {% for prompt in prompts %}
 <div class="flex flex-col ml-4 items-center mt-16 prompt-div">
     <div>

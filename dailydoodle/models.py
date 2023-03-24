@@ -52,6 +52,9 @@ class Drawing(models.Model):
     # we add this to make querying top drawings easier, however Rating table must be used to get relation between user and drawing upvote
     total_upvotes = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.drawing_id
+
 
 #Add a signal when a drawing is deleted
 @receiver(pre_delete,sender=Drawing)
@@ -68,7 +71,8 @@ class Comment(models.Model):
     date = models.DateTimeField()
     comment = models.CharField(max_length=200,unique=False)
     drawing = models.ForeignKey(Drawing,on_delete=models.CASCADE)
-
+    def __str__(self):
+        return self.comment
 
 
 

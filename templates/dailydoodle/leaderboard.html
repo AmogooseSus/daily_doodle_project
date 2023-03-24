@@ -7,7 +7,7 @@ Home
 {% block body_block %}
 <section class="flex flex-col mt-8 gap-4">
     <h1 class="text-5xl text-white font-bold" id="top-title">Top {{amount}} users</h1>
-    <div class="flex flex-col self-end mr-64">
+    <div class="flex flex-col self-end mr-64 md:mr-0">
         <h6 class="text-xs self-start">Search Users</h6>
         <div class="flex flex-row bg-main p-2 rounded-full">
         <input type="text" name="search" id="search-bar" class="bg-main" />
@@ -21,17 +21,17 @@ Home
     </div>
 
     <div id="leaderboard-text" class=" w-11/12 flex flex-row justify-between px-8">
-        <h3>Position</h3>
-        <h3>Username</h3>
-        <h3>Most upvoted Prompt</h3>
-        <h3>Total Upvotes</h3>
+        <h3 class="md:text-xs">Position</h3>
+        <h3  class="md:text-xs">Username</h3>
+        <h3  class="md:text-xs">Most upvoted Prompt</h3>
+        <h3  class="md:text-xs">Total Upvotes</h3>
     </div>
 
-    <div id="search-results" class="w-11/12 h-auto mt-4 flex flex-col divide-y divide-extra_blue divid-y-2 hidden">
+    <div id="search-results" class="w-11/12 md:w-full h-auto mt-4 flex flex-col divide-y divide-extra_blue divid-y-2 hidden">
 
     </div>
 
-    <div id="leaderboard" class="w-11/12 h-auto mt-4 flex flex-col divide-y divide-extra_blue divide-y-2">
+    <div id="leaderboard" class="w-11/12 md:w-full h-auto mt-4 flex flex-col divide-y divide-extra_blue divide-y-2">
         {% for user,drawing in data %}
             {% if forloop.counter == 1%}
             <div class="w-full bg-main h-auto px-8 py-4 flex flex-row justify-between rounded-t-lg board hover:cursor-pointer">

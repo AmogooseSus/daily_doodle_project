@@ -15,11 +15,11 @@ Draw
         </div>
     </div>
 </div>
-<section class="flex flex-row mt-16 h-full w-full">
-    <div>
+<section class="flex flex-row mt-16 h-full w-full md:flex-col">
+    <div class="md:w-2/3">
         <h6 class="text-xs">Search References</h6>
         <div class="flex flex-row bg-main p-2 rounded-full items-center">
-        <input type="text" name="search" id="search-bar" class="bg-main " />
+        <input type="text" name="search" id="search-bar" class="bg-main md:w-1/2" />
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path opacity="0.4" d="M11.6665 4.16666H16.6665" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path opacity="0.4" d="M11.6665 6.66666H14.1665" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -27,8 +27,8 @@ Draw
             <path opacity="0.4" d="M18.3332 18.3333L16.6665 16.6667" stroke="#D84E60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>            
         </div>
-        <button id="search" name="search">Search photots</button>
-        <div id="selected"> 
+        <button id="search" name="search">Search photos</button>
+        <div id="selected" class="md:flex md:flex-row md:flex-wrap "> 
 
         </div>
     </div>
@@ -37,7 +37,7 @@ Draw
     <div class="flex flex-col h-full w-full items-center">
         <h1 class="text-white text-5xl font-bold mb-8">{{ prompt }}</h1>
 
-        <canvas id="canvas" class="aspect-video w-3/4 rounded-lg shadow-lg self-center"></canvas>
+        <canvas id="canvas" class="aspect-video w-3/4 md:w-full  rounded-lg shadow-lg self-center"></canvas>
 
         <div class="flex flex-row w-4/5 justify-evenly mt-2 ">
             <button id="clear" class="bg-main rounded-lg p-2 group"><svg class="h-10 w-10" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,14 +63,14 @@ Draw
             </button>
         </div>
 
-        <div class="flex flex-row mt-16 justify-evenly w-4/5 ">
-            <div class="flex flex-col bg-main p-8 w-1/4 rounded-lg ">
+        <div class="flex flex-row mt-16 justify-evenly w-4/5 md:w-full md:flex-col md:self-center ">
+            <div class="flex flex-col bg-main p-8 w-1/4 md:w-full rounded-lg ">
                 <h5 class="text-s">Pen Size</h5>
                 <input type="range" min="1" max="50" value="5" id="pen-size" class="rounded-lg accent-secondary_contrast appearance-none bg-extra_blue"/> 
                 <h5 class="text-s mt-4">Eraser Size</h5>
                 <input type="range" min="1" max="50" value="10" id="eraser-size" class="rounded-lg accent-secondary_contrast appearance-none bg-extra_blue" /> 
             </div>
-            <div class="flex flex-col bg-main p-8 w-1/4 rounded-lg items-center justify-evenly">
+            <div class="flex flex-col bg-main p-8 w-1/4 rounded-lg items-center justify-evenly md:w-full md:mt-2">
                 <h5>Colour</h5>
                 <input type="color" value="#000000" id="color" class="rounded appearance-none border-none"/>
                 <h6 class="text-xs">click top pick!</h6>

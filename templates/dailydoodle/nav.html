@@ -1,25 +1,22 @@
 {% load staticfiles %}
-<nav class="flex flex-col bg-main w-1/6">
+<nav class="flex flex-col bg-main w-1/6 sm:w-full sm:h-fit " >
     {% if user.username %}
-    <div class="flex flex-row p-4 items-center">
-        <img class="rounded-lg h-16 w-20" src="{{ MEDIA_URL}}{{user_profile_picture}}" alt="Profile Picture" />
-        <h1 class="ml-4 break-all text-secondary_gray text-center font-semibold">{{ user.username }}</h1>
+    <div class="flex flex-row p-4 items-center sm:w-full" id="user-info">
+        <img class="rounded-lg h-16 w-20 md:h-8 md:w-10 sm:h-14 sm:w-16" src="{{ MEDIA_URL}}{{user_profile_picture}}" alt="Profile Picture" />
+        <h1 class="ml-4 break-all text-secondary_gray text-center font-semibold  md:text-xs">{{ user.username }}</h1>
     </div>
     {% endif %}
 
-    <div class="flex flex-col p-4 h-full ">
+    <div class="flex flex-col p-4 h-full sm:w-full" id="full-links">
         {% for k,v in all_links.items %}
             {% if current_link == k %}
-            <div class="bg-compliment p-2 rounded-lg flex flex-row items-center mt-2">
-                {{v.1 | safe}}
-                <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
-            </div>
+            <div class="bg-compliment p-2 rounded-lg flex flex-row items-center mt-2 ">
             {% else %}
-                <div class=" p-2 rounded-lg flex flex-row items-center mt-2">
-                    {{v.1 | safe}}
-                    <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
-                </div>
+            <div class=" p-2 rounded-lg flex flex-row items-center mt-2">
             {% endif %}
+            {{v.1 | safe}}
+            <a class="block text-main_gray text-bold w-full h-full " href="{% url v.0 %}">{{k}}</a>
+            </div>
         {% endfor %}
         {%if user.username%}
                 {% for k,v in locked_links.items %}
@@ -46,16 +43,13 @@
         {% else %}
                     {% for k,v in non_locked_links.items %}
                     {% if current_link == k %}
-                    <div class="bg-compliment p-2 rounded-lg flex flex-row items-center mt-2">
+                        <div class="bg-compliment p-2 rounded-lg flex flex-row items-center mt-2 sm:round-full">
+                    {% else %}
+                        <div class=" p-2 rounded-lg flex flex-row items-center mt-2">
+                    {% endif %}
                         {{v.1 | safe}}
                         <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
                     </div>
-                    {% else %}
-                        <div class=" p-2 rounded-lg flex flex-row items-center mt-2">
-                            {{v.1 | safe}}
-                            <a class="block text-main_gray text-bold w-full h-full" href="{% url v.0 %}">{{k}}</a>
-                        </div>
-                    {% endif %}
                     {% endfor %}
         {% endif %}
     </div>

@@ -35,8 +35,10 @@ $().ready(() => {
     let references = []
     let max_amount = 3;
 
+    $("#canvas")
+
     
-    $("#canvas").mousedown((e) => {
+    $("#canvas").bind( "mousedown pointerdown",(e) => {
         mouseDown = true;
         ctx.beginPath();
         // reset redoStack if new line started on clear canvas
@@ -45,13 +47,15 @@ $().ready(() => {
             redoTop = -1;
         }
     })
-    $("#canvas").mouseup((e) => {
+    $("#canvas").bind("mouseup pointerup",(e) => {
         mouseDown = false;
         // add image data to undo stack and increment index
         undoStack.push(ctx.getImageData(0,0,canvas.width,canvas.height));
         undoTop++;
     })
+    $("#canvas").on("pointermove",handle_drawing)
     $("#canvas").mousemove(handle_drawing);
+
 
     function handle_drawing(e) {
         if(!mouseDown) return;
@@ -63,7 +67,6 @@ $().ready(() => {
             ctx.lineWidth = eraserWidth;
             ctx.strokeStyle = canvasColour;
         }  
-
         drawLine(e.offsetX,e.offsetY);
     }
 
