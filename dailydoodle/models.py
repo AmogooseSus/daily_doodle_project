@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
-import os
 from daily_doodle_project import settings
-from django.db.models.signals import pre_delete,pre_save
+from django.db.models.signals import pre_delete,pre_save,post_save
 from django.dispatch import receiver
+from dailydoodle.apis import get_random_profile_picture
 
 # Create your models here.
 
@@ -16,6 +16,7 @@ def handle_user_deletion(sender,instance,**kwargs):
         profile.profile_picture.delete()
     except:
         print("user profile was default")
+
 
 def rename_path(instance,filename):
     file_type = filename[filename.rfind("."):]

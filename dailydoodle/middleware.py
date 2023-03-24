@@ -30,8 +30,9 @@ class PromptMiddleware:
         while(len(Prompt.objects.filter(prompt=next_prompt)) != 0 and next_prompt != None):
             next_prompt = get_random_prompt()
         # lock this critical section so no 2 users can activate this middleware at the same time and hence generating a new prompt
+        print(next_prompt)
         with transaction.atomic():
-            p = Prompt.objects.create(prompt=next_prompt,prompt_date=date.today())
+            Prompt.objects.create(prompt=next_prompt,prompt_date=date.today())
 
 
        

@@ -131,6 +131,7 @@ dmypy.json
 .pyre/
 
 # Django media and db stuff
-media/submissions/*
 media/profile_images/*.jpg
 dailydoodle/migrations/*
+media/submissions/*
+!media/submissions/Sample*

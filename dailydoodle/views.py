@@ -9,25 +9,19 @@ from django.urls import reverse
 from registration.backends.simple.views import RegistrationView
 from django.utils.decorators import method_decorator
 from dailydoodle.apis import *
-from dailydoodle.view_helpers import *
 from datetime import date,datetime
 from daily_doodle_project.settings import MEDIA_URL,MEDIA_ROOT
 import base64
+import os
 
-
-# Create your views here.
-
-# NOTE any class views that don't benifit from using class based syntax will
-# be reverted to a function
-
-# TODO replace all filter where we want only element with .objects.get()
+# TODO 404 or places where get can throw errors
 
 # Class view for homepage 
 class Index(View):
 
     def get(self,request):
         # get todays prompt 
-        prompt = Prompt.objects.get(prompt_date=date.today())
+        prompt = Prompt.objects.filter(prompt_date=date.today())[0]
         context_dict = {"current_link": "Homepage"}
         # get top 5 drawings (use helper function) and add them to context dict
         top_drawings = Drawing.objects.filter(prompt=prompt).order_by("-total_upvotes")[:5].values()
@@ -201,7 +195,7 @@ class Profile(View):
         requested_change = request.POST.get("password_change")
         request.user.set_password(requested_change)
         request.user.save()
-        return redirect(reverse("dailydoodle:profile") + "?changed_username=successs")
+        return redirect(reverse("dailydoodle:profile"))
     
 
     def handle_picture_change(self,request):
@@ -211,10 +205,10 @@ class Profile(View):
             dir.replace("\\","/")      
             os.remove(dir)
         except:
-            print("user profile was default")
+            print("error deleting previous profile picture")
         profile.profile_picture = request.FILES["picture"]
         profile.save()
-        return redirect(reverse("dailydoodle:profile") + "?changed_profile=success")
+        return redirect(reverse("dailydoodle:profile") + "?changed_picture=success")
     
 
 # Class view for Draw mode
@@ -222,13 +216,12 @@ class Draw(View):
 
     @method_decorator(login_required)
     def get(self,request):
+        # get todays prompt
         prompt = Prompt.objects.filter(prompt_date=date.today())[0]
         user_drawing = Drawing.objects.filter(user=request.user,prompt=prompt)
         if(len(user_drawing) != 0):
            return redirect(reverse("dailydoodle:index"))
         context_dict = {}
-        # get todays prompt
-        prompt = Prompt.objects.filter(prompt_date=date.today())[0]
         context_dict["prompt"] = prompt.prompt
         return render(request,"dailydoodle/draw.html",context=context_dict)
     
@@ -266,12 +259,11 @@ class DrawingView(View):
     @method_decorator(login_required)
     def get(self,request,drawing_id):
         context_dict = {}
-        prompt = Prompt.objects.filter(prompt_date=date.today())[0].prompt
         user_drawing = Drawing.objects.get(drawing_id=drawing_id)
         comments = Comment.objects.filter(drawing=drawing_id).order_by("-date")
         context_dict["MEDIA_URL"] = MEDIA_URL
         context_dict["viewing_user"] = UserProfile.objects.get(user=user_drawing.user)
-        context_dict["prompt"] = prompt
+        context_dict["prompt"] = user_drawing.prompt.prompt
         context_dict["drawing"] = user_drawing
         context_dict["current_user"] = UserProfile.objects.get(user=request.user)
         comment_profiles = []
