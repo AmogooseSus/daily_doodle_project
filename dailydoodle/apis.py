@@ -30,7 +30,7 @@ def get_random_profile_picture(username):
             return f"/profile_images/{username}.jpg"
     else:
         with open(f"{MEDIA_ROOT}/profile_images/{username}.jpg","wb") as out_file:
-                to_copy = open(f"{MEDIA_ROOT}/profile_images/cat.png","rb")
+                to_copy = open(f"{MEDIA_ROOT}/profile_images/Cat.png","rb")
                 shutil.copyfileobj(to_copy,out_file)
         print("Random Image API Error:", response.status_code, response.text)
         return f"/profile_images/{username}.jpg"
